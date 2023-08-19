@@ -3,7 +3,9 @@ import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { BoltIcon } from '@heroicons/react/20/solid';
 import { NDKProvider, useNDK } from "@nostr-dev-kit/ndk-react";
 import ZapModal from '../components/ZapModal'
+import LoginModal from './LoginModal';
 import { toast } from 'react-toastify';
+import { useUser } from '../context/UserContext';
 
 
 
@@ -12,9 +14,27 @@ type Props = {}
 const LyricsView = (props: Props) => {
 
   const { signPublishEvent } = useNDK();
-
   const [showZapModal, setShowZapModal] = useState(false);
+  const { user, login, logout } = useUser();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   
+ 
+  const handleCancelLoginModal = () => {
+      setShowLoginModal(false);
+  };
+
+  const handleLoginSubmit = async () => {
+    try {
+      await login()
+      toast.success(`Welcome ${user?.npub}`)
+      setShowLoginModal(false)
+    
+    } catch (error) {
+      console.log(error)
+      toast.error("Problem logging in")
+      setShowLoginModal(false)
+    }
+  };
 
   const handleCancel = () => {
       setShowZapModal(false);
