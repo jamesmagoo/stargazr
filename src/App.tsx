@@ -1,4 +1,5 @@
 import { BoltIcon } from '@heroicons/react/20/solid';
+import { NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import { Fragment, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,8 +12,14 @@ import Main from './components/Main';
 function App() {
 
     const [showLoginModal, setShowLoginModal] = useState(false);
-    const { loginWithNip07 } = useNDK();
-
+    const { loginWithNip07, signer } = useNDK();
+    
+    type User = {
+      npub: string ;
+      signer : typeof signer ;
+    } | undefined
+  
+    const [user, setUser] = useState<User>(undefined)
     const handleCancel = () => {
         setShowLoginModal(false);
     };
@@ -20,22 +27,17 @@ function App() {
     const handleLoginSubmit = async () => {
       try {
         const user = await loginWithNip07();
-        user
-        if(user){
-          toast.success(`Welcome ${user.npub}`)
-          setShowLoginModal(false)
-        } else {
-          toast.error("Problem logging in")
-          setShowLoginModal(false)
-        }
+        setUser(user)
+        toast.success(`Welcome ${user?.npub}`)
+        setShowLoginModal(false)
+      
       } catch (error) {
+        console.log(error)
         toast.error("Problem logging in")
         setShowLoginModal(false)
       }
       
     };
-
-
   return (
     <Fragment>
       <nav className='justify-between'>
@@ -55,6 +57,7 @@ function App() {
           <span>Login</span>
         </button>
       </nav>
+      <p>{user?.npub}</p>
       <Main />
       
       <LoginModal handleCancel={handleCancel} handleSubmit={handleLoginSubmit} showLoginModal={showLoginModal} />
