@@ -1,15 +1,16 @@
 import { BoltIcon } from '@heroicons/react/20/solid';
-import { NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import { Fragment, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginModal from './components/LoginModal';
-import Main from './components/Main';
+import Main from './components/LyricsView';
 
 
 
 function App() {
+
+  //https://getalby.com/oauth?client_id=v7Lfkmjfzy&response_type=code&redirect_uri=https://localhost:5173&scope=account:read%20invoices:create%20invoices:read%20transactions:read%20balance:read%20payments:send
 
     const [showLoginModal, setShowLoginModal] = useState(false);
     const { loginWithNip07, signer } = useNDK();

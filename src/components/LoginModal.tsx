@@ -1,4 +1,3 @@
-'use client'
 import { Dialog, Transition } from '@headlessui/react';
 import { BoltIcon } from '@heroicons/react/24/solid';
 import { Fragment, useRef, useState } from 'react';

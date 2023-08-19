@@ -1,11 +1,37 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
+import { BoltIcon } from '@heroicons/react/20/solid';
+import { NDKProvider, useNDK } from "@nostr-dev-kit/ndk-react";
+import ZapModal from '../components/ZapModal'
+import { toast } from 'react-toastify';
+
 
 
 type Props = {}
 
-const Main = (props: Props) => {
+const LyricsView = (props: Props) => {
 
+  const { signPublishEvent } = useNDK();
+
+  const [showZapModal, setShowZapModal] = useState(false);
+  
+
+  const handleCancel = () => {
+      setShowZapModal(false);
+  };
+
+  const handleZap = async () => {
+    try {
+      toast.success(`ZAPPPPPPP`)
+      setShowZapModal(false)
+    
+    } catch (error) {
+      console.log(error)
+      toast.error("Problem logging in")
+      setShowZapModal(false)
+    }
+    
+  };
 
     const lyricsEvent = {
         "id": "04d03336271abc1dcd8a3e9bd7bfc66fda96bf324d00784091d6ef8476988e65",
@@ -41,7 +67,14 @@ const Main = (props: Props) => {
     <div>
       <div className="flex min-h-screen flex-col items-center justify-center h-max">
         <div className='flex flex-row justify-between w-1/2'>
-          <button className='bg-red-200 border border-black text-strong '>⚡️Zap</button>
+        <button
+          type='button'
+          className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
+          onClick={() => setShowZapModal(true)}
+        >
+          <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
+          <span>Zap!</span>
+        </button>
           <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
         </div>
         <h1>{lyricsEvent.tags.find(tag => tag[0] === 'title')?.[1]}</h1>
@@ -61,9 +94,9 @@ const Main = (props: Props) => {
           />
         </div>
         </div>
-
+            <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
       </div>
   )
 }
 
-export default Main
+export default LyricsView
