@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Main from './components/LyricsView';
+import LyricsView from './components/LyricsView';
 import Navbar from './components/Navbar.tsx';
 import { UserProvider } from './context/UserContext.tsx';
+import { Outlet } from "react-router-dom";
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
     <Fragment>
       <UserProvider>
       <Navbar/>
-      <Main />
+      <Outlet />
       <ToastContainer
         position='top-center'
         autoClose={3000}

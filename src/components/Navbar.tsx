@@ -4,6 +4,7 @@ import { useUser } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
+import { Link } from 'react-router-dom'
 
 
 const Navbar = () => {
@@ -37,11 +38,27 @@ const Navbar = () => {
     return (
         <>
             <nav className='justify-between'>
+                <Link to={`/`}>
                 <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
                     <p className="fixed left-0 top-0 flex w-full justify-center border-b border-black bg-white pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto  lg:rounded-xl lg:border lg:p-4">
                         <b>stargazer -&nbsp; </b> explore lyrics & poetry
                     </p>
                 </div>
+                </Link>
+
+
+                <ul>
+                    {/* <li>
+                        <Link to={`test`}>Test</Link>
+                    </li> */}
+                    <li>
+                        <Link to={`publish`}>Publish Lyrics</Link>
+                    </li>
+                    <li>
+                        <Link to={`user`}>Your Stuff</Link>
+                    </li>
+                </ul>
+
 
                 <button
                     type='button'
