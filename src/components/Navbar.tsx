@@ -45,12 +45,7 @@ const Navbar = () => {
                     </p>
                 </div>
                 </Link>
-
-
                 <ul>
-                    {/* <li>
-                        <Link to={`test`}>Test</Link>
-                    </li> */}
                     <li>
                         <Link to={`publish`}>Publish Lyrics</Link>
                     </li>

@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
+import { Outlet } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LyricsView from './components/LyricsView';
 import Navbar from './components/Navbar.tsx';
 import { UserProvider } from './context/UserContext.tsx';
-import { Outlet } from "react-router-dom";
 
 function App() {
+
 
   //https://getalby.com/oauth?client_id=v7Lfkmjfzy&response_type=code&redirect_uri=https://localhost:5173&scope=account:read%20invoices:create%20invoices:read%20transactions:read%20balance:read%20payments:send
 
@@ -32,3 +32,5 @@ function App() {
 }
 
 export default App
+
+
