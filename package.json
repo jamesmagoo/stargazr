@@ -12,7 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
-    "@nostr-dev-kit/ndk": "^0.8.17",
+    "@nostr-dev-kit/ndk": "^0.8.18",
     "@nostr-dev-kit/ndk-react": "^0.1.1",
     "@types/react-router-dom": "^5.3.3",
     "react": "^18.2.0",

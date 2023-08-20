@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import { useState } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { BoltIcon } from '@heroicons/react/20/solid';
-import { NDKProvider, useNDK } from "@nostr-dev-kit/ndk-react";
+import { useNDK } from "@nostr-dev-kit/ndk-react";
 import ZapModal from '../components/ZapModal'
 import LoginModal from './LoginModal';
 import { toast } from 'react-toastify';
@@ -16,33 +16,20 @@ const LyricsView = (props: Props) => {
   const { signPublishEvent } = useNDK();
   const [showZapModal, setShowZapModal] = useState(false);
   const { user, login, logout } = useUser();
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  
- 
-  const handleCancelLoginModal = () => {
-      setShowLoginModal(false);
-  };
 
-  const handleLoginSubmit = async () => {
-    try {
-      await login()
-      toast.success(`Welcome ${user?.npub}`)
-      setShowLoginModal(false)
-    
-    } catch (error) {
-      console.log(error)
-      toast.error("Problem logging in")
-      setShowLoginModal(false)
-    }
-  };
 
   const handleCancel = () => {
-      setShowZapModal(false);
+    setShowZapModal(false);
   };
 
   const handleZap = async () => {
     try {
-      toast.success(`ZAPPPPPPP`)
+      if (user) {
+        console.log(`User logged in we can zap.. ${user.npub}`)
+      } else {
+        console.log("no user ")
+      }
+      //toast.success(`ZAPPPPPPP`)
       setShowZapModal(false)
     
     } catch (error) {
@@ -86,17 +73,7 @@ const LyricsView = (props: Props) => {
   return (
     <div>
       <div className="flex min-h-screen flex-col items-center justify-center h-max">
-        <div className='flex flex-row justify-between w-1/2'>
-        <button
-          type='button'
-          className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
-          onClick={() => setShowZapModal(true)}
-        >
-          <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-          <span>Zap!</span>
-        </button>
-          <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
-        </div>
+        
         <h1>{lyricsEvent.tags.find(tag => tag[0] === 'title')?.[1]}</h1>
         <p>Arctic Monkeys</p>
 
@@ -113,9 +90,20 @@ const LyricsView = (props: Props) => {
             }}
           />
         </div>
+        <div className='flex flex-row justify-between w-1/2'>
+          <button
+            type='button'
+            className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
+            onClick={() => setShowZapModal(true)}
+          >
+            <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
+            <span>Zap!</span>
+          </button>
+          <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
         </div>
-            <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
       </div>
+      <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
+    </div>
   )
 }
 

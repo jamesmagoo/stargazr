@@ -71,7 +71,7 @@ const [open, setOpen] = useState(true);
 
                 <div className='mt-2'>
                   <p className='text-sm text-gray-500'>
-                    Full Feature Coming Next Month.
+                    No wallet installed? Follow this easy set-up process at 
                   </p>
                   <br />
 

@@ -64,7 +64,7 @@ const ZapModal = ({ showZapModal, handleCancel, handleZap }: Props) => {
                                         as='h3'
                                         className='text-lg leading-6 font-medium text-gray-900'
                                     >
-                                        Login with Bitcoin
+                                        Zap this arstist some satoshis!
                                     </Dialog.Title>
 
                                     <div className='mt-2'>
