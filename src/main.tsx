@@ -46,7 +46,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <NDKProvider
       relayUrls={[
-        "ws://127.0.0.1:8080"
+        "ws://127.0.0.1:8080",
+        "wss://purplepag.es"
       ]}
     >
       <RouterProvider router={router} />
