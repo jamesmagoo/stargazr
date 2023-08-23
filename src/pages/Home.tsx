@@ -3,65 +3,71 @@ import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { toast } from 'react-toastify';
 import LyricGridComponent from '../components/LyricGridComponent';
+import { useEvent } from '../context/EventContext';
 
 
 const Home = () => {
 
-  const { fetchEvents,ndk } = useNDK();
-  const [lyricEvents, setLyricEvents] = useState<NDKEvent[]>()
+  const { fetchEvents, ndk } = useNDK();
+  const { ndkEvents , setNDKEvents } = useEvent();
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
-const placeholderImageUrls = [
-  "https://placehold.co/600x400/orange/white",
-  "https://placehold.co/600x400/blue/white",
-  "https://placehold.co/600x400/red/white",
-  "https://placehold.co/600x400/yellow/white",
-  "https://placehold.co/600x400/green/black",
-  "https://placehold.co/600x400/purple/white",
-  "https://placehold.co/600x400/black/white",
-  "https://placehold.co/600x400/brown/white",
-  "https://placehold.co/600x400/orange/white",
-];
-
-// const getRandomImage = () => {
-//   const randomIndex = Math.floor(Math.random() * 10);
-//   return placeholderImageUrls[randomIndex];
-// };
-
-const getRandomImage = () => {
-  const randomIndex = Math.floor(Math.random() * 22) + 1; 
-  return `/placeholders/placeholder-${randomIndex}.png`; 
-};
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * 22) + 1;
+    return `/placeholders/placeholder-${randomIndex}.png`;
+  };
 
   const filter: NDKFilter = {
     kinds: [30023],
     "#t": ["lyric", "lyrics"],
   };
 
+  // useEffect(() => {
+  //   setLoadingState(true);
+  //   fetchEvents(filter)
+  //     .then((response) => {
+  //       response.map((value, index) => {
+  //         console.log(value, index);
+  //       });
+  //       setNDKEvents(response);
+  //     })
+  //     .catch((err) => {
+  //       toast.error("Error getting lyrics..");
+  //       console.log(err);
+  //       setNDKEvents(null);
+  //     })
+  //     .finally(() => {
+  //       setLoadingState(false);
+  //     });
+  // }, [ndk]);
+
   useEffect(() => {
-    setLoadingState(true);
-    fetchEvents(filter)
-      .then((response) => {
-        response.map((value, index) => {
-          console.log(value, index);
+    // Check if ndkEvents is already populated
+    if (!ndkEvents) {
+      setLoadingState(true);
+      fetchEvents(filter)
+        .then((response) => {
+          response.map((value, index) => {
+            console.log(value, index);
+          });
+          setNDKEvents(response);
+        })
+        .catch((err) => {
+          toast.error("Error getting lyrics..");
+          console.log(err);
+          setNDKEvents(null);
+        })
+        .finally(() => {
+          setLoadingState(false);
         });
-        setLyricEvents(response)
-      })
-      .catch((err) => {
-        toast.error("Error getting lyrics..");
-        console.log(err);
-        setLyricEvents(undefined)
-      })
-      .finally(() => {
-        setLoadingState(false);
-      });
-  }, [ndk]);
+    }
+  }, []);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4'>
       {loadingState === true && <div key={1}>Loading...</div>}
-      {loadingState === false && lyricEvents?.map((value, index) => (
-        <LyricGridComponent event={value} index={index} imageUrl={getRandomImage()} />
+      {loadingState === false && ndkEvents?.map((value, index) => (
+        <LyricGridComponent event={value} key={index} imageUrl={getRandomImage()} />
       ))}
     </div>
 
