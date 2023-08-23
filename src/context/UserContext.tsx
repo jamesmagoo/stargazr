@@ -1,10 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import * as React from 'react'
 import { useNDK } from "@nostr-dev-kit/ndk-react";
-
-type User = {
-  npub: string;
-  signer: any;
-} | undefined;
+import { NDKSubscriptionOptions, NDKUser } from '@nostr-dev-kit/ndk';
 
 type NDKUserProfile = {
   name?: string;
@@ -20,8 +17,7 @@ type NDKUserProfile = {
 } | undefined;
 
 type UserContextProps = {
-  user: User;
-  profile : NDKUserProfile
+  user: NDKUser;
   login: () => Promise<void>;
   logout: () => void;
 };
@@ -41,25 +37,32 @@ type UserProviderProps = {
   };
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const { loginWithNip07, getUser } = useNDK();
     const [user, setUser] = useState<any>(undefined);
-    const [profile, setProfile] = useState<NDKUserProfile>(undefined);
-    const { loginWithNip07, signer, getProfile } = useNDK();
   
     const login = async () => {
       console.log(`user provider logging in...`)
-      let user = await loginWithNip07();
-      setUser(user);
-      if(user !== undefined){
-        let profile = await getProfile(user.npub); 
-        setProfile(profile)
-        console.log(profile)
+      let loginAttempt = await loginWithNip07();
+      let user ;
+      if(loginAttempt !== undefined){
+        user = getUser(loginAttempt?.npub); 
+        console.log(`User: ${user.npub}`)
       }
+      try{
+        let options : NDKSubscriptionOptions = {
+          closeOnEose : true, 
+          groupable:true}
+        await user?.fetchProfile(options)
+      } catch(err) {
+        console.error("Problem fetching profile...",err)
+  
+      }
+      setUser(user)
     };
   
     const logout = () => {
       setUser(undefined);
-      setProfile(undefined);
     };
   
-    return <UserContext.Provider value={{ user, login, logout, profile }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
   };

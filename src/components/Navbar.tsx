@@ -6,11 +6,9 @@ import { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
 import { Link } from 'react-router-dom'
 
-
 const Navbar = () => {
-    const { user, login, profile, logout } = useUser();
+    const { user, login, logout } = useUser();
     const [showLoginModal, setShowLoginModal] = useState(false);
-
 
     const handleCancelLoginModal = () => {
         setShowLoginModal(false);
@@ -27,9 +25,13 @@ const Navbar = () => {
         }
     };
 
+    const handleLoginClick = async () => {
+        await handleLoginSubmit();
+      };
+
     useEffect(() => {
-        if (profile !== undefined) {
-            toast.success(`Welcome ${profile?.displayName}`);
+        if (user !== undefined) {
+            toast.success(`Welcome ${user.profile?.displayName}`);
         }
     }, [user]);
 
@@ -43,14 +45,14 @@ const Navbar = () => {
                         </p>
                     </div>
                 </Link>
-                <ul>
+                {/* <ul>
                     <li>
                         <Link to={`publish`}>Publish Lyrics</Link>
                     </li>
                     <li>
                         <Link to={`user`}>Your Stuff</Link>
                     </li>
-                </ul>
+                </ul> */}
 
 
                 {user === undefined ? (
@@ -64,8 +66,10 @@ const Navbar = () => {
                     </button>
                 ) : (
                     <div className='flex flex-row items-center space-x-10'>
-                        <img src={profile?.image} className='h-20'></img>
-                        <p>{profile?.displayName}</p>
+                        <div className='h-20 flex'>
+                        <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
+                        </div>
+                        <p>{user.profile?.displayName}</p>
                         <button
                             type='button'
                             className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-sm text-sm font-medium rounded-md text-black bg-red-500 hover:bg-red-200'
@@ -77,8 +81,7 @@ const Navbar = () => {
                     </div>
                 )}
             </nav>
-            <p>{user?.npub}</p>
-            <LoginModal handleCancel={handleCancelLoginModal} handleSubmit={handleLoginSubmit} showLoginModal={showLoginModal} />
+            <LoginModal handleCancel={handleCancelLoginModal} handleSubmit={handleLoginClick} showLoginModal={showLoginModal} />
         </>
     )
 }
