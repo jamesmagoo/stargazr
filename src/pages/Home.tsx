@@ -7,7 +7,7 @@ import LyricGridComponent from '../components/LyricGridComponent';
 
 const Home = () => {
 
-  const { fetchEvents } = useNDK();
+  const { fetchEvents,ndk } = useNDK();
   const [lyricEvents, setLyricEvents] = useState<NDKEvent[]>()
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
@@ -23,9 +23,14 @@ const placeholderImageUrls = [
   "https://placehold.co/600x400/orange/white",
 ];
 
+// const getRandomImage = () => {
+//   const randomIndex = Math.floor(Math.random() * 10);
+//   return placeholderImageUrls[randomIndex];
+// };
+
 const getRandomImage = () => {
-  const randomIndex = Math.floor(Math.random() * 10);
-  return placeholderImageUrls[randomIndex];
+  const randomIndex = Math.floor(Math.random() * 22) + 1; 
+  return `/placeholders/placeholder-${randomIndex}.png`; 
 };
 
   const filter: NDKFilter = {
@@ -35,7 +40,6 @@ const getRandomImage = () => {
 
   useEffect(() => {
     setLoadingState(true);
-
     fetchEvents(filter)
       .then((response) => {
         response.map((value, index) => {
@@ -51,11 +55,11 @@ const getRandomImage = () => {
       .finally(() => {
         setLoadingState(false);
       });
-  }, []);
+  }, [ndk]);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4'>
-      {loadingState === true && <div>Loading...</div>}
+      {loadingState === true && <div key={1}>Loading...</div>}
       {loadingState === false && lyricEvents?.map((value, index) => (
         <LyricGridComponent event={value} index={index} imageUrl={getRandomImage()} />
       ))}
