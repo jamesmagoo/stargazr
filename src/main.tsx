@@ -1,5 +1,5 @@
 import { NDKProvider } from "@nostr-dev-kit/ndk-react"
-import * as React from 'react'
+import React from 'react'
 import *  as ReactDOM from 'react-dom/client'
 import {
   RouterProvider,
@@ -9,10 +9,9 @@ import App from './App.tsx'
 import LyricsView from './components/LyricsView.tsx'
 import './index.css'
 import ErrorPage from './pages/ErrorPage.tsx'
-import HomePageView from "./pages/HomePageView.tsx"
 import PublishLyricsPage from './pages/PublishLyricsPage.tsx'
 import UserPage from "./pages/UserPage.tsx"
-
+import Home from "./pages/Home.tsx"
 
 const router = createBrowserRouter([
   {
@@ -22,6 +21,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <Home />,
+      },
+      {
+        path: "lyrics",
         element: <LyricsView />,
       },
       {
@@ -33,10 +36,6 @@ const router = createBrowserRouter([
         element: <UserPage />,
       },
     ],
-  },
-  {
-    path: "test",
-    element: <HomePageView />
   },
 ]);
 

@@ -52,34 +52,12 @@ const LyricsView = (props: Props) => {
   }
 
 
-  const { signPublishEvent, fetchEvents } = useNDK();
   const [showZapModal, setShowZapModal] = useState(false);
   const [lyricEvents, setLyricEvents] = useState<any[]>()
   const [showCommentSection, setShowCommentSection] = useState(false)
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const { user, login, logout } = useUser();
-
-  // TODO : once NDK is sorted repalce type with NDKFilter 
-  const filter: any = {
-    kinds: [30023],
-    "#t": ["lyric", "lyrics"],
-  };
-
-  // fetch lyric events 
-  useEffect(() => {
-    fetchEvents(filter).then((response) => {
-      setLoadingState(true)
-      setLyricEvents(response);
-      response.map((value, index) => {
-        console.log(value, index)
-      })
-      setLoadingState(false)
-    }).catch((err) => {
-      toast.error("Error getting lyrics..")
-      console.log(err)
-      setLoadingState(false)
-    })
-  }, [])
+  
 
 
   const handleCancel = () => {
