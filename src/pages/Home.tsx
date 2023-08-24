@@ -22,46 +22,41 @@ const Home = () => {
     "#t": ["lyric", "lyrics"],
   };
 
-  // useEffect(() => {
-  //   setLoadingState(true);
-  //   fetchEvents(filter)
-  //     .then((response) => {
-  //       response.map((value, index) => {
-  //         console.log(value, index);
-  //       });
-  //       setNDKEvents(response);
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Error getting lyrics..");
-  //       console.log(err);
-  //       setNDKEvents(null);
-  //     })
-  //     .finally(() => {
-  //       setLoadingState(false);
-  //     });
-  // }, [ndk]);
-
   useEffect(() => {
-    // Check if ndkEvents is already populated
-    if (!ndkEvents) {
-      setLoadingState(true);
-      fetchEvents(filter)
-        .then((response) => {
-          response.map((value, index) => {
-            console.log(value, index);
-          });
-          setNDKEvents(response);
-        })
-        .catch((err) => {
-          toast.error("Error getting lyrics..");
-          console.log(err);
-          setNDKEvents(null);
-        })
-        .finally(() => {
-          setLoadingState(false);
-        });
-    }
-  }, []);
+    setLoadingState(true);
+    fetchEvents(filter)
+      .then((response) => {
+        setNDKEvents(response);
+      })
+      .catch((err) => {
+        toast.error("Error getting lyrics..");
+        console.log(err);
+        setNDKEvents(null);
+      })
+      .finally(() => {
+        setLoadingState(false);
+      });
+  }, [ndk]);
+
+  // TODO figure out how to stop relaoding events everytime in above useEffect...
+  // useEffect(() => {
+  //   if (!ndkEvents) {
+  //     console.log("No events in context")
+  //     setLoadingState(true);
+  //     fetchEvents(filter)
+  //       .then((response) => {
+  //         setNDKEvents(response);
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Error getting lyrics..");
+  //         console.log(err);
+  //         setNDKEvents(null);
+  //       })
+  //       .finally(() => {
+  //         setLoadingState(false);
+  //       });
+  //   }
+  // }, []);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4'>

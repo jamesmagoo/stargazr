@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 type Props = {
-    onClick : ()=>void
+    onClick : any
 }
 
 function ZapButton({ 

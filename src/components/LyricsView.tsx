@@ -21,6 +21,9 @@ const LyricsView = () => {
   const [webln, setWebln] = useState<any>('');
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [currentEvent, setCurrentEvent] = useState<NDKEvent | null>(null)
+  const [showZapModal, setShowZapModal] = useState(false);
+  const [showCommentSection, setShowCommentSection] = useState(false)
+  const { user, login, logout } = useUser();
 
   useEffect(() => {
     const findEventByID = (id: string) => {
@@ -69,17 +72,6 @@ const LyricsView = () => {
       console.log(nodeInfo)
     }
   }
-
-  const publishZapEvent = () => {
-    makeAnLNPayment()
-    // make a request? 
-  }
-
-
-  const [showZapModal, setShowZapModal] = useState(false);
-  const [lyricEvents, setLyricEvents] = useState<any[]>()
-  const [showCommentSection, setShowCommentSection] = useState(false)
-  const { user, login, logout } = useUser();
   
 
   const handleCancel = () => {
@@ -90,7 +82,7 @@ const LyricsView = () => {
     setShowCommentSection(false)
   }
 
-  const handleZap = async () => {
+  const handleZap = async (event : NDKEvent) => {
     try {
       if (user) {
         console.log(`User logged in we can zap.. ${user.npub}`)
@@ -139,7 +131,7 @@ const LyricsView = () => {
                   <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                   <span>Zap!</span>
                 </button>
-                <ZapButton onClick={handleZap} />
+                <ZapButton onClick={handleZap(currentEvent)} />
                 <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
               </div>
               <div className='my-10 border border-grey-500 rounded-lg '>
@@ -162,7 +154,7 @@ const LyricsView = () => {
           )}
         </div>
       )}
-      <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
+      <ZapModal handleCancel={handleCancel} handleZap={()=>{console.log("cccc")}} showZapModal={showZapModal} />
       <ExplorerView showCommentsSection={showCommentSection} handleClose={handleClose} />
     </div>
   );

@@ -75,14 +75,14 @@ h1 {
   transition: border-color 0.25s;
 } */
 
-button {
+/* button {
   @apply 
     px-3 py-2 
     rounded-sm 
     flex justify-between items-center gap-2
     text-sm
     bg-yellow-600;
-}
+} */
 
 
 /* @media (prefers-color-scheme: light) {
