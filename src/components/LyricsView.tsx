@@ -10,6 +10,7 @@ import { requestProvider } from 'webln'
 import { NDKEvent } from '@nostr-dev-kit/ndk'
 import { useEvent } from '../context/EventContext';
 import { useParams } from 'react-router-dom';
+import ZapButton from './ZapButton';
 
 const LyricsView = () => {
 
@@ -22,11 +23,6 @@ const LyricsView = () => {
   const [currentEvent, setCurrentEvent] = useState<NDKEvent | null>(null)
 
   useEffect(() => {
-
-    ndkEvents?.map((value) =>{
-      console.log(value.id)
-    })
-    // Function to find an event by its ID
     const findEventByID = (id: string) => {
       console.log("searching for event in context...")
       return ndkEvents?.find((event) => event.id === id);
@@ -34,9 +30,7 @@ const LyricsView = () => {
   
     // Check if an eventID is available
     if (eventID) {
-      const foundEvent = findEventByID(eventID);
-      console.log(foundEvent)
-  
+      const foundEvent = findEventByID(eventID);  
       if (foundEvent) {
         // Set the found event as the currentEvent
         setCurrentEvent(foundEvent);
@@ -135,23 +129,17 @@ const LyricsView = () => {
                 <EyeIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                 <span>Show Comments & Annotations</span>
               </button> */}
+             
               <div className='flex flex-row justify-between w-1/2'>
                 <button
                   type='button'
-                  className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
+                  className='h-10 relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
                   onClick={() => setShowZapModal(true)}
                 >
                   <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                   <span>Zap!</span>
                 </button>
-                <button
-                  type='button'
-                  className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
-                  onClick={() => publishZapEvent()}
-                >
-                  <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-                  <span>Publish Zap Event</span>
-                </button>
+                <ZapButton onClick={handleZap} />
                 <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
               </div>
               <div className='my-10 border border-grey-500 rounded-lg '>
