@@ -1,10 +1,10 @@
 import { BoltIcon } from '@heroicons/react/20/solid';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../context/UserContext';
-import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
-import { Link } from 'react-router-dom'
 
 const Navbar = () => {
     const { user, login, logout } = useUser();
@@ -14,7 +14,7 @@ const Navbar = () => {
         setShowLoginModal(false);
     };
 
-    const handleLoginSubmit = async () => {
+    const handleLogin = async () => {
         try {
             await login()
             setShowLoginModal(false)
@@ -24,16 +24,6 @@ const Navbar = () => {
             setShowLoginModal(false)
         }
     };
-
-    const handleLoginClick = async () => {
-        await handleLoginSubmit();
-      };
-
-    useEffect(() => {
-        if (user !== undefined) {
-            toast.success(`Welcome ${user.profile?.displayName}`);
-        }
-    }, [user]);
 
     return (
         <>
@@ -67,7 +57,7 @@ const Navbar = () => {
                 ) : (
                     <div className='flex flex-row items-center space-x-10'>
                         <div className='h-20 flex'>
-                        <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
+                            <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
                         </div>
                         <p>{user.profile?.displayName}</p>
                         <button
@@ -81,7 +71,7 @@ const Navbar = () => {
                     </div>
                 )}
             </nav>
-            <LoginModal handleCancel={handleCancelLoginModal} handleSubmit={handleLoginClick} showLoginModal={showLoginModal} />
+            <LoginModal handleCancel={handleCancelLoginModal} handleSubmit={handleLogin} showLoginModal={showLoginModal} />
         </>
     )
 }

@@ -1,25 +1,13 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import * as React from 'react'
 import { useNDK } from "@nostr-dev-kit/ndk-react";
-import { NDKSubscriptionOptions, NDKUser } from '@nostr-dev-kit/ndk';
-
-type NDKUserProfile = {
-  name?: string;
-  displayName?: string;
-  image?: string;
-  banner?: string;
-  bio?: string;
-  nip05?: string;
-  lud06?: string;
-  lud16?: string;
-  about?: string;
-  zapService?: string;
-} | undefined;
+import { NDKUser, NDKNip07Signer } from '@nostr-dev-kit/ndk';
+import { toast } from 'react-toastify';
 
 type UserContextProps = {
-  user: NDKUser;
-  login: () => Promise<void>;
+  user: NDKUser | undefined;
   logout: () => void;
+  login: () => void;
 };
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -33,36 +21,40 @@ export const useUser = () => {
 };
 
 type UserProviderProps = {
-    children: ReactNode; // Defines the 'children' prop
-  };
+  children: ReactNode; // Defines the 'children' prop
+};
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const { loginWithNip07, getUser } = useNDK();
-    const [user, setUser] = useState<any>(undefined);
-  
-    const login = async () => {
-      console.log(`user provider logging in...`)
-      let loginAttempt = await loginWithNip07();
-      let user ;
-      if(loginAttempt !== undefined){
-        user = getUser(loginAttempt?.npub); 
-        console.log(`User: ${user.npub}`)
-      }
-      try{
-        let options : NDKSubscriptionOptions = {
-          closeOnEose : true, 
-          groupable:true}
-        await user?.fetchProfile(options)
-      } catch(err) {
-        console.error("Problem fetching profile...",err)
-  
-      }
-      setUser(user)
-    };
-  
-    const logout = () => {
-      setUser(undefined);
-    };
-  
-    return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
+  const [user, setUser] = useState<NDKUser | undefined>(undefined);
+
+  const {ndk} = useNDK()
+  const login = async () => {
+    console.log(`user provider logging in...`)
+    let newUser: NDKUser | undefined
+    try {
+        const nip07signer = new NDKNip07Signer();
+        nip07signer.user().then(async (user) => {
+            if (!!user.npub) {
+                newUser = ndk?.getUser({ npub: `${user.npub}` })
+                console.log(newUser)
+                await newUser?.fetchProfile()
+                setUser(newUser)
+                const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
+                toast.success(message)
+                setUser(newUser)
+            }
+        }).catch((err) => {
+            console.log("Problem logging in: ", err)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+};
+
+
+  const logout = () => {
+    setUser(undefined);
   };
+
+  return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
+};
