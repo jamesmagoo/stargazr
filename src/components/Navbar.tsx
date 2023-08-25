@@ -5,10 +5,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../context/UserContext';
 import LoginModal from './LoginModal';
+import { NDKUser } from '@nostr-dev-kit/ndk';
+import { useNDK } from '@nostr-dev-kit/ndk-react';
+
 
 const Navbar = () => {
-    const { user, login, logout } = useUser();
+    const { user, setUser, logout } = useUser();
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const { ndk, loginWithNip07 } = useNDK();
 
     const handleCancelLoginModal = () => {
         setShowLoginModal(false);
@@ -24,6 +28,31 @@ const Navbar = () => {
             setShowLoginModal(false)
         }
     };
+
+    const login = async () => {
+        let newUser: NDKUser | undefined
+        try {
+            let res = await loginWithNip07()
+            if (res != undefined) {
+                res.signer.user().then(async (user) => {
+                    if (!!user.npub) {
+                        newUser = ndk?.getUser({ npub: `${user.npub}` })
+                        await newUser?.fetchProfile()
+                        setUser(newUser)
+                        const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
+                        toast.success(message)
+                        setUser(newUser)
+                        console.log(newUser)
+                    }
+                }).catch((err) => {
+                    console.log("Problem logging in: ", err)
+                })
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <>

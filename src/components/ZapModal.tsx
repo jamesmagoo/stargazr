@@ -64,12 +64,12 @@ const ZapModal = ({ showZapModal, handleCancel, handleZap }: Props) => {
                                         as='h3'
                                         className='text-lg leading-6 font-medium text-gray-900'
                                     >
-                                        Zap this arstist some satoshis!
+                                        Zap this artist some satoshis!
                                     </Dialog.Title>
 
                                     <div className='mt-2'>
                                         <p className='text-sm text-gray-500'>
-                                            Full Feature Coming Next Month.
+                                            Send value directly at the speed of light! 
                                         </p>
                                         <br />
 
@@ -79,9 +79,9 @@ const ZapModal = ({ showZapModal, handleCancel, handleZap }: Props) => {
                                         <button
                                             type='button'
                                             onClick={() => handleZap()}
-                                            className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm'
+                                            className=' text-black w-full inline-flex justify-center rounded-md border border-black shadow-sm px-4 py-2 bg-yellow-400 text-base font-medium hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm'
                                         >
-                                            Connect Wallet
+                                            ⚡️ Zap 
                                         </button>
                                         <button
                                             type='button'

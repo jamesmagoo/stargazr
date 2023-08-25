@@ -1,4 +1,3 @@
-import { BoltIcon } from '@heroicons/react/20/solid';
 import { NDKEvent, NDKUserProfile, NostrEvent } from '@nostr-dev-kit/ndk';
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import { bech32 } from "bech32";
@@ -26,8 +25,9 @@ const LyricsView = () => {
   const [currentEvent, setCurrentEvent] = useState<NDKEvent | null>(null)
   const [showZapModal, setShowZapModal] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false)
-  const { getUser, ndk } = useNDK();
+  const { ndk } = useNDK();
   const { user } = useUser();
+  const [numberOfZaps, setNumberOfZaps] = useState(0);
 
   useEffect(() => {
     const findEventByID = (id: string) => {
@@ -90,9 +90,9 @@ const LyricsView = () => {
         const amount = sats * 1000
         // TODO fill this in
         const comment = "I just wanted to be one of The Strokes..."
-        if(currentEvent !== null){
+        if (currentEvent !== null) {
           let result = await getZapRequest(currentEvent, sender, amount, comment);
-          if(result){
+          if (result) {
             toast.success("⚡️ ZAP !")
           } else {
             toast.error("Problem zapping 🫠 ")
@@ -100,7 +100,7 @@ const LyricsView = () => {
         }
       } else {
         console.log("no user ")
-        toast.error("Please login with our wallet")
+        toast.error("Please login")
       }
       setShowZapModal(false)
 
@@ -114,64 +114,73 @@ const LyricsView = () => {
 
   const getZapRequest = async (note: NDKEvent, sender: string, amount: number, comment: string) => {
 
-    // get the recipients lnurls from their profile..
-    let author = getUser(note.pubkey)
-    await author.fetchProfile()
-    console.log("author profile:", author)    
-    const callback = await getZapEndpoint(author.profile);
-    console.log("got a callback", callback)
+    let author = ndk?.getUser({ hexpubkey: `${note.pubkey}` })
+    // use ndk to do this 
+    console.log(author)
+    await author?.fetchProfile();
+    console.log("author profile:", author)
+    let callback;
+    if (author?.profile != undefined) {
+      callback = await getZapEndpoint(author.profile);
+      console.log("got a callback", callback)
 
-    if (callback == null) {
+      if (callback == null) {
+        return false;
+      }
+    } else {
+      toast.error("Could not get authors profile")
       return false;
     }
+    const sats = Math.round(amount);
 
-  const sats = Math.round(amount);
-
-  const zapReq: NostrEvent = {
-    kind: 9734,
-    pubkey: user.npub,
-    created_at: Math.round(Date.now() / 1000),
-    content: comment,
-    tags: [
-      ["p", note.pubkey],
-      // e - is an optional hex-encoded event id. Clients MUST include this if zapping an event rather than a person
-      // TODO : implement this e tag  
-      ["e", "tag reference"],
-      ["amount", String(sats)],
-      ["relays", "ws://127.0.0.1:8080"],
-      // TODO : implement lnurl py url of recipient 
-      ["lnurl", String(author.profile?.lud16) ]
-    ],
-  };
+    let zapRequestEvent; 
+    if (user) {
+      const zapReq: NostrEvent = {
+        kind: 9734,
+        pubkey: user.npub,
+        created_at: Math.round(Date.now() / 1000),
+        content: comment,
+        tags: [
+          ["p", note.pubkey],
+          // e - is an optional hex-encoded event id. Clients MUST include this if zapping an event rather than a person
+          // TODO : implement this e tag  
+          ["e", "tag reference"],
+          ["amount", String(sats)],
+          ["relays", "ws://127.0.0.1:8080"],
+          // TODO : implement lnurl py url of recipient 
+          ["lnurl", String(author.profile?.lud16)]
+        ],
+      };
 
       let zapRequestEvent = new NDKEvent(ndk, zapReq)
-      let signedEvent = zapRequestEvent.sign()
-
-  try {
-    const event = encodeURI(JSON.stringify(signedEvent));
-    const r2 = await (await fetch(`${callback}?amount=${sats}&nostr=${event}`)).json();
-    const pr = r2.pr; // invoice
-    if (webln !== null) {
-    await webln.sendPayment(pr);
-    } else { 
+      await zapRequestEvent.sign(ndk?.signer)
+    }
+    try {
+      const event = encodeURI(JSON.stringify(zapRequestEvent));
+      const r2 = await (await fetch(`${callback}?amount=${sats}&nostr=${event}`)).json();
+      const pr = r2.pr; // invoice
+      if (webln !== null) {
+        await webln.sendPayment(pr);
+      } else {
+        return false;
+      }
+      setNumberOfZaps(numberOfZaps + sats)
+      return true;
+    } catch (reason) {
+      console.error('Failed to zap: ', reason);
+      toast.error("Failed to zap!")
       return false;
     }
-    return true;
-  } catch (reason) {
-    console.error('Failed to zap: ', reason);
-    toast.error("Failed to zap!")
-    return false;
-  }
 
 
   }
 
-  const getZapEndpoint = async (user: NDKUserProfile): Promise<string | null>  => {
+  const getZapEndpoint = async (user: NDKUserProfile): Promise<string | null> => {
     try {
       let lnurl: string = ''
 
-      let {lud06, lud16} = user;
-  
+      let { lud06, lud16 } = user;
+
       if (lud16) {
         console.log("lud16 found")
         let [name, domain] = lud16.split('@')
@@ -180,17 +189,17 @@ const LyricsView = () => {
       }
       else if (lud06) {
         console.log("lud06 found")
-        let {words} = bech32.decode(lud06, 1023)
+        let { words } = bech32.decode(lud06, 1023)
         let data = bech32.fromWords(words)
         lnurl = utils.utf8Decoder.decode(data)
       }
       else {
         return null;
       }
-  
+
       let res = await fetch(lnurl)
       let body = await res.json()
-  
+
       if (body.allowsNostr && body.nostrPubkey) {
         return body.callback;
       }
@@ -199,7 +208,7 @@ const LyricsView = () => {
       return null;
       /*-*/
     }
-  
+
     return null;
   }
 
@@ -225,17 +234,10 @@ const LyricsView = () => {
                 <span>Show Comments & Annotations</span>
               </button> */}
 
-              <div className='flex flex-row justify-between w-1/2'>
-                <button
-                  type='button'
-                  className='h-10 relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
-                  onClick={() => setShowZapModal(true)}
-                >
-                  <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-                  <span>Zap!</span>
-                </button>
-                <ZapButton onClick={handleZap} />
-                <p className='border-black border p-1 bg-red-200'>No. of Zaps:</p>
+              <div className='flex flex-row justify-center w-1/2 items-center'>
+                <ZapButton onClick={() => setShowZapModal(true)} />
+                <button type="button" className="h-10 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Zaps ⚡️ {numberOfZaps}</button>
+
               </div>
               <div className='my-10 border border-grey-500 rounded-lg '>
                 <ReactMarkdown
@@ -257,7 +259,7 @@ const LyricsView = () => {
           )}
         </div>
       )}
-     <ZapModal handleCancel={handleCancel} handleZap={handleCancel} showZapModal={showZapModal} />
+      <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
       <ExplorerView showCommentsSection={showCommentSection} handleClose={handleClose} />
     </div>
   );

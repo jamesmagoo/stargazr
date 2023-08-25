@@ -24,6 +24,7 @@ const Home = () => {
 
   useEffect(() => {
     setLoadingState(true);
+    console.log("loading lyrics")
     fetchEvents(filter)
       .then((response) => {
         setNDKEvents(response);
