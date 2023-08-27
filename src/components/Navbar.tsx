@@ -64,14 +64,11 @@ const Navbar = () => {
                         </p>
                     </div>
                 </Link>
-                {/* <ul>
+                <ul>
                     <li>
                         <Link to={`publish`}>Publish Lyrics</Link>
                     </li>
-                    <li>
-                        <Link to={`user`}>Your Stuff</Link>
-                    </li>
-                </ul> */}
+                </ul>
 
 
                 {user === undefined ? (

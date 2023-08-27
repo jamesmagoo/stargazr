@@ -15,7 +15,7 @@ function LyricGridComponent({ event, imageUrl }: Props) {
     return (
         <Link to={`lyric/${event.id}`}
         onClick={()=>{setEvent(event)}}
-            className="cursor-pointer relative bg-white border border-gray-300 rounded-lg shadow-lg p-4 hover:shadow-xl transition duration-300 ease-in-out hover:scale-105"
+            className="cursor-pointer relative bg-white border border-gray-300 rounded-lg shadow-lg p-4 hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 aspect-square"
             style={{ backgroundImage: `url('${imageUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
         }
         >

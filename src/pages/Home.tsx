@@ -60,7 +60,7 @@ const Home = () => {
   // }, []);
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4'>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4 h-auto'>
       {loadingState === true && <div key={1}>Loading...</div>}
       {loadingState === false && ndkEvents?.map((value, index) => (
         <LyricGridComponent event={value} key={index} imageUrl={getRandomImage()} />
