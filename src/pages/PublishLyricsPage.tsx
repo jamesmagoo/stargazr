@@ -1,12 +1,77 @@
 import { useState } from "react"
+import { NDKEvent, NDKTag } from "@nostr-dev-kit/ndk"
+import { useNDK } from "@nostr-dev-kit/ndk-react"
+import { toast } from "react-toastify";
+import { useUser } from "../context/UserContext";
 
-
+interface FormData {
+  title: string;
+  content: string;
+  tags: NDKTag[] // An array of arrays where each inner array contains two strings
+}
 
 export default function PublishLyricsPage() {
 
-  const [title, setTitle] = useState("")
+  const { ndk } = useNDK();
+  const { user } = useUser();
+  const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState("")
+  const [summary, setSummary] = useState("Lyrics posted on stargazer")
+  const [formData, setFormData] = useState<FormData>({
+    title: '',
+    content: '',
+    tags: [["t", "lyrics"]]
+  });
+
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!user) {
+      setLoading(false);
+      toast.error('Please login');
+      return;
+    }
+
+    if (formData.content.length > 0 && formData.title.length > 0) {
+      const event = new NDKEvent(ndk);
+      event.kind = 30023;
+      event.created_at = Math.floor(Date.now() / 1000);
+
+      const newTags: NDKTag[] = [
+        ["summary", summary],
+        ["title", formData.title],
+        ["published_at", event.created_at.toString()]
+      ];
 
 
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        tags: [...prevFormData.tags, ...newTags]
+      }));
+
+      formData.tags.map((tag)=>{
+        event.tags.push(tag)
+      })
+
+      newTags.map(tag => {
+        event.tags.push(tag);
+      });
+      
+
+      event.content = content;
+      //await event.publish();
+      console.log(event)
+    } else {
+      toast.error("Please input a title & content")
+    }
+
+  }
+
+  const onChange = (e:any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData)
+  };;
 
 
   return (
@@ -22,7 +87,7 @@ export default function PublishLyricsPage() {
             </div>
           </div>
           <div className="mt-5 md:col-span-2 md:mt-0">
-            <form action="#" method="POST">
+            <form onSubmit={onSubmit} method='POST'>
               <div className="shadow sm:overflow-hidden sm:rounded-md">
                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                   <div className="grid grid-cols-3 gap-6">
@@ -33,8 +98,10 @@ export default function PublishLyricsPage() {
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
                           type="text"
-                          name="company-website"
-                          id="company-website"
+                          onChange={onChange}
+                          required
+                          name="title"
+                          id="title"
                           className="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                           placeholder="Title"
                         />
@@ -48,8 +115,10 @@ export default function PublishLyricsPage() {
                     </label>
                     <div className="mt-1">
                       <textarea
-                        id="about"
-                        name="about"
+                        id="content"
+                        name="content"
+                        onChange={onChange}
+                        required
                         rows={24}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Jesus in the day spa.."
@@ -128,5 +197,3 @@ export default function PublishLyricsPage() {
     </>
   )
 }
-
-
