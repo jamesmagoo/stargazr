@@ -1,15 +1,16 @@
-import { useState } from "react"
-import { NDKEvent, NDKTag } from "@nostr-dev-kit/ndk"
-import { useNDK } from "@nostr-dev-kit/ndk-react"
+import { NDKEvent, NDKTag } from "@nostr-dev-kit/ndk";
+import { useNDK } from "@nostr-dev-kit/ndk-react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
+import MarkdownPreview from "../components/MarkdownPreview";
 
 interface FormData {
   title: string;
   content: string;
   image: string,
-  summary: string; 
-  tags: NDKTag[] 
+  summary: string;
+  tags: NDKTag[]
 }
 
 export default function PublishLyricsPage() {
@@ -46,9 +47,9 @@ export default function PublishLyricsPage() {
         ["published_at", event.created_at.toString()]
       ];
 
-      if(formData.image.length != 0){
+      if (formData.image.length != 0) {
         console.log("Image url provided")
-        if(isValidURL(formData.image)){
+        if (isValidURL(formData.image)) {
           newTags.push(["image", formData.image])
         } else {
           toast.error("The image URL provided is not valid - double check it")
@@ -64,17 +65,22 @@ export default function PublishLyricsPage() {
 
       console.log(formData)
 
-      formData.tags.map((tag)=>{
+      formData.tags.map((tag) => {
         event.tags.push(tag)
       })
 
       newTags.map(tag => {
         event.tags.push(tag);
       });
-      
 
-      event.content = formData.content;
-      //await event.publish();
+      // Replace single line breaks with double line breaks for proper rendering
+      const markdownWithLineBreaks = formData.content.replace(/\n/g, '  \n');
+
+      event.content = markdownWithLineBreaks;
+      let result = await event.publish();
+      if (result) {
+        toast.success(`Published to Nostr! ${Array.from(result)[0]}`)
+      }
       console.log(event)
     } else {
       toast.error("Please input a title & content")
@@ -91,9 +97,11 @@ export default function PublishLyricsPage() {
     }
   }
 
-  const onChange = (e:any) => {
+  const onChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };;
+
+  const markdownWithLineBreaks = formData.content.replace(/\n/g, '  \n');
 
 
   return (
@@ -151,6 +159,7 @@ export default function PublishLyricsPage() {
                       Song lyrics to be posted to Nostr.
                     </p>
                   </div>
+                  <MarkdownPreview markdownText={markdownWithLineBreaks}/>
 
                   <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-3 sm:col-span-2">
