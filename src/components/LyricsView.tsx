@@ -10,8 +10,8 @@ import { requestProvider } from 'webln';
 import ZapModal from '../components/ZapModal';
 import { useEvent } from '../context/EventContext';
 import { useUser } from '../context/UserContext';
-import ExplorerView from '../pages/ExplorerView';
 import ZapButton from './ZapButton';
+import { HeartIcon, ShareIcon } from '@heroicons/react/20/solid';
 
 
 const LyricsView = () => {
@@ -24,7 +24,6 @@ const LyricsView = () => {
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [currentEvent, setCurrentEvent] = useState<NDKEvent | null>(null)
   const [showZapModal, setShowZapModal] = useState(false);
-  const [showCommentSection, setShowCommentSection] = useState(false)
   const { ndk } = useNDK();
   const { user } = useUser();
   const [numberOfZaps, setNumberOfZaps] = useState(0);
@@ -74,10 +73,6 @@ const LyricsView = () => {
   const handleCancel = () => {
     setShowZapModal(false);
   };
-
-  const handleClose = () => {
-    setShowCommentSection(false)
-  }
 
   // TODO fix this, need to pass correct event through to zap....
   const handleZap = async () => {
@@ -133,7 +128,7 @@ const LyricsView = () => {
     }
     const sats = Math.round(amount);
 
-    let zapRequestEvent; 
+    let zapRequestEvent;
     if (user) {
       const zapReq: NostrEvent = {
         kind: 9734,
@@ -164,6 +159,7 @@ const LyricsView = () => {
       } else {
         return false;
       }
+      // TODO implement zap receipt....
       setNumberOfZaps(numberOfZaps + sats)
       return true;
     } catch (reason) {
@@ -223,22 +219,43 @@ const LyricsView = () => {
         <div className="flex min-h-screen flex-col items-center justify-center h-max">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
-              <h1>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</h1>
-              <p className='p-6'>Artist Name</p>
-              {/* <button
-                type='button'
-                className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-s-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
-                onClick={() => setShowCommentSection(true)}
-              >
-                <EyeIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-                <span>Show Comments & Annotations</span>
-              </button> */}
+              <div className='flex items-center justify-between w-full h-24 bg-red-200 p-4'>
+                <div className='flex flex-col items-start'>
+                  <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
+                  <p className='text-sm'>Artist Name</p>
+                </div>
 
-              <div className='flex flex-row justify-center w-1/2 items-center'>
-                <ZapButton onClick={() => setShowZapModal(true)} />
-                <button type="button" className="h-10 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Zaps ⚡️ {numberOfZaps}</button>
+                <div className='flex items-center'>
+                  <button
+                    type="button"
+                    className="flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                    onClick={() => setShowZapModal(true)}
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-1">Zaps</span>
+                      <span className="text-lg">⚡️</span>
+                      <span className="ml-1">{numberOfZaps}</span>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    className="flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                  >
+                    <HeartIcon className="w-5 h-5 inline-block mr-2" />
+                    Like
+                  </button>
+                  <button
+                    type="button"
+                    className="flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                  >
+                    <ShareIcon className="w-5 h-5 inline-block mr-2" />
+                    Share
+                  </button>
 
+                  <ZapButton onClick={() => setShowZapModal(true)} />
+                </div>
               </div>
+
               <div className='my-10 border border-grey-500 rounded-lg '>
                 <ReactMarkdown
                   className='font-mono mx-10 space-y-5'
@@ -260,7 +277,6 @@ const LyricsView = () => {
         </div>
       )}
       <ZapModal handleCancel={handleCancel} handleZap={handleZap} showZapModal={showZapModal} />
-      <ExplorerView showCommentsSection={showCommentSection} handleClose={handleClose} />
     </div>
   );
 

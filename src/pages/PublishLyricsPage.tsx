@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
 import MarkdownPreview from "../components/MarkdownPreview";
 
+
 interface FormData {
   title: string;
   content: string;
@@ -40,11 +41,13 @@ export default function PublishLyricsPage() {
       const event = new NDKEvent(ndk);
       event.kind = 30023;
       event.created_at = Math.floor(Date.now() / 1000);
+      let slug: any = String(Date.now())
 
       const newTags: NDKTag[] = [
         ["summary", formData.summary],
         ["title", formData.title],
-        ["published_at", event.created_at.toString()]
+        ["published_at", event.created_at.toString()],
+        ["d", slug],
       ];
 
       if (formData.image.length != 0) {
@@ -63,8 +66,6 @@ export default function PublishLyricsPage() {
         tags: [...prevFormData.tags, ...newTags]
       }));
 
-      console.log(formData)
-
       formData.tags.map((tag) => {
         event.tags.push(tag)
       })
@@ -81,6 +82,7 @@ export default function PublishLyricsPage() {
       if (result) {
         toast.success(`Published to Nostr! ${Array.from(result)[0]}`)
       }
+      // TODO remove 
       console.log(event)
     } else {
       toast.error("Please input a title & content")
@@ -159,8 +161,10 @@ export default function PublishLyricsPage() {
                       Song lyrics to be posted to Nostr.
                     </p>
                   </div>
-                  <MarkdownPreview markdownText={markdownWithLineBreaks}/>
-
+                  {markdownWithLineBreaks.length > 0 ?
+                    <MarkdownPreview markdownText={markdownWithLineBreaks} title={formData.title}/>
+                    : null
+                  }
                   <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-3 sm:col-span-2">
                       <label htmlFor="image" className="block text-sm font-medium text-gray-700">
