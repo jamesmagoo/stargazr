@@ -68,6 +68,9 @@ const Navbar = () => {
                     <li>
                         <Link to={`publish`}>Publish Lyrics</Link>
                     </li>
+                    <li>
+                        <Link to={`lyrics`}>View Lyrics</Link>
+                    </li>
                 </ul>
 
 

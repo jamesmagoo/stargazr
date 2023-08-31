@@ -66,7 +66,7 @@ const LoginModal = ({ showLoginModal, handleCancel, handleSubmit }: Props) => {
                     as='h3'
                     className='text-lg leading-6 font-medium text-gray-900'
                   >
-                    Login with Bitcoin
+                    Login
                   </Dialog.Title>
 
                   <div className='mt-2'>
