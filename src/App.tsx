@@ -10,6 +10,7 @@ import PublishLyricsPage from './pages/PublishLyricsPage.tsx';
 import UserPage from "./pages/UserPage.tsx";
 import HomePageView from './pages/HomePageView.tsx';
 import LyricsDetailPage from './pages/LyricsDetailPage.tsx';
+import Splash from './pages/Splash.tsx';
 
 function App() {
 
@@ -19,8 +20,9 @@ function App() {
       <UserProvider>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/lyric/:eventID' element={<LyricsDetailPage />} />
+          <Route path='/' element={<Splash />} />
+          <Route path='/lyrics' element={<Home />} />
+          <Route path='/lyrics/lyric/:eventID' element={<LyricsDetailPage />} />
           <Route path='/publish' element={<PublishLyricsPage />} />
           <Route path='/user' element={<UserPage />} />
           <Route path='/test' element={<HomePageView />} />

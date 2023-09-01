@@ -101,7 +101,7 @@ export default function PublishLyricsPage() {
 
   const onChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };;
+  };
 
   const markdownWithLineBreaks = formData.content.replace(/\n/g, '  \n');
 

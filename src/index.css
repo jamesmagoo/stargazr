@@ -28,6 +28,15 @@
   height: 100%;
 }
 
+.splash-card {
+  background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
+}
+
+.splash-icon {
+  background: linear-gradient(to right, #fddb92 0%, #d1fdff 100%);
+}
+
+
 nav {
   background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
   @apply

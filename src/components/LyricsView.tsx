@@ -208,6 +208,11 @@ const LyricsView = () => {
     return null;
   }
 
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * 22) + 1;
+    return `/placeholders/placeholder-${randomIndex}.png`;
+  };
+
   return (
     <div>
       {loadingState ? ( // Display loading screen when loadingState is true
@@ -216,10 +221,15 @@ const LyricsView = () => {
         </div>
       ) : (
         // Display content when loadingState is false
+        // TODO hook up image url by using a hook to get placeholders / or use the image in the nsotr event - ternary
         <div className="flex min-h-screen flex-col items-center justify-center h-max">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
-              <div className='flex items-center justify-between w-full h-24 bg-red-200 p-4'>
+              <div className='flex items-center justify-between w-full h-24 p-4' 
+              style={{ backgroundImage: `url('${getRandomImage()}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                        {/* <div className='bg-black opacity-50 relative inset-0'></div> */}
+
+              {/* <div className='flex items-center justify-between w-full h-24 bg-red-200 p-4'> */}
                 <div className='flex flex-col items-start'>
                   <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
                   <p className='text-sm'>Artist Name</p>
