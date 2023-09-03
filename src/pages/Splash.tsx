@@ -40,7 +40,7 @@ function Splash({ }: Props) {
           <div className='w-full items-center space-y-4 p-4'>
             <p className='lg:text-6xl text-5xl font-bold'>Artists give us lyrics.</p>
             <h1 className='lg:text-6xl text-5xl font-medium'>Fans love them.</h1>
-            <h1 className='lg:text-6xl text-5xl font-extralight'>It's time to get together.</h1>
+            <h1 className='lg:text-6xl text-5xl font-extralight'>Let's get together.</h1>
           </div>
 
           <div className='mt-4 p-4'>
