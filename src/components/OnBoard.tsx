@@ -1,37 +1,34 @@
-import { useState, useEffect } from 'react';
-import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
-import { KeyIcon, DocumentDuplicateIcon, PlusIcon, BoltIcon } from '@heroicons/react/20/solid';
-import { toast } from 'react-toastify';
+import { BoltIcon, DocumentDuplicateIcon, KeyIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
+import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useUser } from '../context/UserContext';
-import { NDKEvent, NostrEvent, NDKUser, NDKPrivateKeySigner, NDKRelaySet, NDKRelay } from '@nostr-dev-kit/ndk';
 
 type Props = {}
 
 type KeyPair = {
     npub: string;
     nsec: string;
+    hexpub: string;
+    hexpriv: string;
 }
 
 function OnBoard({ }: Props) {
 
 
-    const { ndk, loginWithNip07, signPublishEvent, loginWithSecret, signer } = useNDK();
+    const { ndk, loginWithNip07, loginWithSecret, signer } = useNDK();
     const { user, setUser, logout } = useUser();
-
-
-    /**
-     *  1. Get info to build kind 0 event ; name, avatar, generatePrivateKey
-     *  2. Publish event to relay on success return keys for backup
-     *  3. install Alby 
-     */
 
     const [progressWidth, setProgressWidth] = useState<number>(0);
     const [showKeys, setShowKeys] = useState<boolean>(false)
     const [albyDownloaded, setAlbyDownloaded] = useState<boolean>(false)
     const [keys, setKeys] = useState<KeyPair>({
         npub: "",
-        nsec: ""
+        nsec: "",
+        hexpub: "",
+        hexpriv: "",
     })
 
     const [formData, setFormData] = useState({
@@ -43,12 +40,19 @@ function OnBoard({ }: Props) {
 
     useEffect(() => {
         const storedNsec = localStorage.getItem('nsec');
+        const storedProfileName = localStorage.getItem('profileName')
         if (storedNsec) {
             let hexprivkey = convertKeyToHex(storedNsec)
             let hexpubkey = getPublicKey(hexprivkey)
             let encodedNpub = nip19.npubEncode(hexpubkey)
-            setKeys(() => ({ npub: encodedNpub, nsec: storedNsec }));
+            setKeys(() => ({ hexpriv: hexprivkey, hexpub: hexpubkey, npub: encodedNpub, nsec: storedNsec }));
             setShowKeys(true)
+        }
+        if (storedProfileName) {
+            setFormData((prevState) => ({
+                ...prevState,
+                username: storedProfileName,
+            }))
         }
     }, []);
 
@@ -85,22 +89,28 @@ function OnBoard({ }: Props) {
             setLoading(false)
             setShowKeys(true)
         } else {
-            if(formData.username.length > 0){
-            setLoading(true)
-            // generate a new key pair
-            const privatekeyHex = generatePrivateKey()
-            const publickeyHex = getPublicKey(privatekeyHex)
-            // encode keys 
-            let encodedNsec = nip19.nsecEncode(privatekeyHex)
-            let encodedNpub = nip19.npubEncode(publickeyHex)
-            let res = await loginWithSecret(encodedNsec)
-             
-            await publishKind0Event(encodedNsec, publickeyHex);
-            localStorage.setItem("nsec", encodedNsec)
-            setKeys({ npub: encodedNpub, nsec: encodedNsec })
-            setShowKeys(true)
-            setLoading(false)
+            if (formData.username.length > 0) {
+                setLoading(true)
+                // generate a new key pair
+                const privatekeyHex = generatePrivateKey()
+                const publickeyHex = getPublicKey(privatekeyHex)
+                // encode keys 
+                let encodedNsec = nip19.nsecEncode(privatekeyHex)
+                let encodedNpub = nip19.npubEncode(publickeyHex)
+                let res = await loginWithSecret(encodedNsec)
+                localStorage.setItem("nsec", encodedNsec)
+                localStorage.setItem("profileName", formData.username)
+                setKeys({ hexpub: publickeyHex, hexpriv: privatekeyHex, npub: encodedNpub, nsec: encodedNsec })
+                // Wait for 3 seconds
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                
+                // publish here when signer is ready
+                await publishKind0Event(encodedNsec, publickeyHex)
 
+               
+                setShowKeys(true)
+                setLoading(false)
             } else {
                 toast.info("Add your profile name")
                 return;
@@ -111,39 +121,33 @@ function OnBoard({ }: Props) {
     // TODO fix this so it uses the ndk
     // problem was i couldnt get the signer plugged in... 
     // probably missign something simple
-    const publishKind0Event = async (encodedNsec : string, publickey : string) =>{
-            // let newSigner = new NDKPrivateKeySigner(hexprivkey)
-            // console.log("new signer ")
-            // console.log(newSigner)
-            // console.log(ndk)
-            let newUser;
-            
-            const event = new NDKEvent(ndk);
-            // make user object for content 
-            const user = {
-                "name" : formData.username,
-                // "picture": null,
-                // "about" : null
-            }
-            event.kind = 0;
-            event.content = JSON.stringify(user),
+    const publishKind0Event = async (encodedNsec: string, publickey: string) => {
+        console.log("publishing kind 0")
+        console.log(encodedNsec)
+        const event = new NDKEvent(ndk);
+        const user = {
+            "name": formData.username,
+            // "picture": null,
+            // "about" : null
+        }
+        event.kind = 0;
+        event.content = JSON.stringify(user),
             event.created_at = Math.floor(Date.now() / 1000);
-            event.pubkey = publickey; 
-            // console.log(event)
-            // console.log("signed...")
-            // console.log(event)
-            event.sign()
-            console.log(event)
-            try {
-                
-                // Just publsih to purple pages??? 
-                let publishedProfileEvent = await event.publish()
-                //const publishedProfileEvent = await signPublishEvent(event);
-                console.log(publishedProfileEvent)
-                toast.success("Welcome to Stargazr on Nostr!")
-            } catch {
-                toast.error("Problem creating your profile")
-            }
+        event.pubkey = publickey;
+        // console.log(event)
+        // console.log("signed...")
+        // console.log(event)
+        event.sign(signer)
+        console.log(event)
+        try {
+            // Just publsih to purple pages??? 
+            let publishedProfileEvent = await event.publish()
+            //const publishedProfileEvent = await signPublishEvent(event);
+            console.log(publishedProfileEvent)
+            toast.success("Welcome to Stargazr on Nostr!")
+        } catch {
+            toast.error("Problem creating your profile")
+        }
     }
 
     const copyToClipboard = (e: any) => {
@@ -194,7 +198,6 @@ function OnBoard({ }: Props) {
         }
     }
 
-
     return (
         <div className="splash-card w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-8">
             <div className='flex w-full justify-center mb-6'>
@@ -218,6 +221,15 @@ function OnBoard({ }: Props) {
                     </div>
                 </div>
             </div> */}
+                {signer ? (
+                    // Render content when signer is available
+                    <button onClick={() => publishKind0Event(keys.nsec, keys.hexpub)}>
+                        Publish Kind 0 Event
+                    </button>
+                ) : (
+                    // Render a loading indicator or placeholder content
+                    <div>Loading...</div>
+                )}
                 <form className='w-full p-4'>
                     <div className='text-2xl font-normal mb-6'>Make Profile
                         <p className='text-sm text-slate-600 font-normal'>Some information about yourself.</p>
@@ -237,6 +249,7 @@ function OnBoard({ }: Props) {
                             onChange={onChange}
                             className="block w-full text-gray-900 border rounded-xl border-gray-300 focus:border-indigo-600 bg-white px-4 py-2.5 font-semibold text-heading placeholder:text-text/50 focus:border-primary focus:outline-none focus:ring-0 sm:text-sm"
                             placeholder="Name"
+                            value={formData.username}
                         />
                         <p
                             aria-live="polite"
@@ -275,10 +288,35 @@ function OnBoard({ }: Props) {
                         {showKeys ? null : (<div className='justify-center w-full my-6 flex'>
                             <button
                                 onClick={createNostrProfile}
+                                disabled={loading}
                                 className="hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                             >
-                                <KeyIcon className="w-5 h-5 inline-block mr-2" />
-                                Create Account
+                                {loading ? (
+                                    <div className="flex items-center">
+                                        <span className="animate-spin inline-block mr-2">
+                                            <svg
+                                                className="w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                                />
+                                            </svg>
+                                        </span>
+                                        Loading...
+                                    </div>
+                                ) : (
+                                    <>
+                                        <KeyIcon className="w-5 h-5 inline-block mr-2" />
+                                        Create Account
+                                    </>
+                                )}
                             </button>
                         </div>)}
                         <div>
@@ -372,7 +410,7 @@ function OnBoard({ }: Props) {
                                 <span>Login</span>
                             </button>
                         </div></>) :
-                        (null)}
+                    (null)}
             </div>
 
         </div>
