@@ -12,7 +12,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <NDKProvider
       relayUrls={[
-        "ws://127.0.0.1:8080"
+        "wss://purplepag.es",
+        "wss://nos.lol ",
+				"wss://relay.damus.io",
+				"wss://relay.nostr.band",
+				"wss://relayable.org",
+				"wss://nostr.rocks",
+				"wss://nostr.fmt.wiz.biz",
       ]}
     >
       <UserProvider>
