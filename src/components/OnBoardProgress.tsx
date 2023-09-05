@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { CheckIcon } from '@heroicons/react/24/outline';
+import { useEffect } from 'react';
 
 type Props = {
     steps:any,
-    activeStep:any
+    activeStep?:any
 }
 
-const OnBoardProgress = ({steps, activeStep} : Props) => {
+const OnBoardProgress = ({steps} : Props) => {
   
 
   // TODO: Get progess bar to update with multi-step form

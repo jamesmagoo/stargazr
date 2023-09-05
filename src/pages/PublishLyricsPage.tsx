@@ -18,7 +18,7 @@ export default function PublishLyricsPage() {
 
   const { ndk } = useNDK();
   const { user } = useUser();
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',

@@ -1,17 +1,14 @@
-import { HeartIcon, SparklesIcon } from "@heroicons/react/20/solid";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
-import { useEffect, useState } from "react";
+import { SparklesIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
-import { useNDK } from "@nostr-dev-kit/ndk-react";
 
 type Props = {}
 
 function CommentsList({ }: Props) {
 
     const { user } = useUser();
-    const { ndk } = useNDK();
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     // TODO make a type for the unpublsihed user comment
     const [userComment, setUserComment] = useState<any>({
         content: '',

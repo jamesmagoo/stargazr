@@ -2,7 +2,7 @@ import { BoltIcon, DocumentDuplicateIcon, KeyIcon, PlusIcon } from '@heroicons/r
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useUser } from '../context/UserContext';
 
@@ -19,9 +19,9 @@ function OnBoard({ }: Props) {
 
 
     const { ndk, loginWithNip07, loginWithSecret, signer } = useNDK();
-    const { user, setUser, logout } = useUser();
-
-    const [progressWidth, setProgressWidth] = useState<number>(0);
+    const { setUser } = useUser();
+    // TODO
+    // const [, setProgressWidth] = useState<number>(0);
     const [showKeys, setShowKeys] = useState<boolean>(false)
     const [albyDownloaded, setAlbyDownloaded] = useState<boolean>(false)
     const [keys, setKeys] = useState<KeyPair>({
@@ -37,8 +37,20 @@ function OnBoard({ }: Props) {
     });
 
     const [loading, setLoading] = useState<boolean>(false);
+    const isMounted = useRef(false)
 
     useEffect(() => {
+        const bootUpLogin = async () => {
+            // generate keys and login user 
+            const privatekeyHex = generatePrivateKey()
+            const publickeyHex = getPublicKey(privatekeyHex)
+            // encode keys 
+            let encodedNsec = nip19.nsecEncode(privatekeyHex)
+            let encodedNpub = nip19.npubEncode(publickeyHex)
+            await loginWithSecret(encodedNsec)
+            setKeys({ hexpub: publickeyHex, hexpriv: privatekeyHex, npub: encodedNpub, nsec: encodedNsec })
+        }
+
         const storedNsec = localStorage.getItem('nsec');
         const storedProfileName = localStorage.getItem('profileName')
         if (storedNsec) {
@@ -47,7 +59,13 @@ function OnBoard({ }: Props) {
             let encodedNpub = nip19.npubEncode(hexpubkey)
             setKeys(() => ({ hexpriv: hexprivkey, hexpub: hexpubkey, npub: encodedNpub, nsec: storedNsec }));
             setShowKeys(true)
+        } else {
+            if (!isMounted.current) {
+                bootUpLogin();
+                isMounted.current = true;
+            }
         }
+
         if (storedProfileName) {
             setFormData((prevState) => ({
                 ...prevState,
@@ -56,30 +74,30 @@ function OnBoard({ }: Props) {
         }
     }, []);
 
-    // Function to update the progress width
-    const updateProgress = (percentage: number) => {
-        setProgressWidth(percentage);
-    };
+    // TODO Function to update the progress width
+    // const updateProgress = (percentage: number) => {
+    //     setProgressWidth(percentage);
+    // };
 
     const onChange = (e: any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onMutate = (e: any) => {
-        //Checkboxes
-        if (e.target.checked == true && e.target.type == 'checkbox') {
-            //checkbox was checked
-            setFormData((prevState) => ({
-                ...prevState,
-                [e.target.name]: true,
-            }));
-        } else {
-            setFormData((prevState) => ({
-                ...prevState,
-                [e.target.name]: false,
-            }));
-        }
-    };
+    // const onMutate = (e: any) => {
+    //     //Checkboxes
+    //     if (e.target.checked == true && e.target.type == 'checkbox') {
+    //         //checkbox was checked
+    //         setFormData((prevState) => ({
+    //             ...prevState,
+    //             [e.target.name]: true,
+    //         }));
+    //     } else {
+    //         setFormData((prevState) => ({
+    //             ...prevState,
+    //             [e.target.name]: false,
+    //         }));
+    //     }
+    // };
 
 
     const createNostrProfile = async (e: any) => {
@@ -91,24 +109,13 @@ function OnBoard({ }: Props) {
         } else {
             if (formData.username.length > 0) {
                 setLoading(true)
-                // generate a new key pair
-                const privatekeyHex = generatePrivateKey()
-                const publickeyHex = getPublicKey(privatekeyHex)
-                // encode keys 
-                let encodedNsec = nip19.nsecEncode(privatekeyHex)
-                let encodedNpub = nip19.npubEncode(publickeyHex)
-                let res = await loginWithSecret(encodedNsec)
-                localStorage.setItem("nsec", encodedNsec)
+                localStorage.setItem("nsec", keys.nsec)
+                // TODO is there any need for this? may be vulnerable to xss attack...
                 localStorage.setItem("profileName", formData.username)
-                setKeys({ hexpub: publickeyHex, hexpriv: privatekeyHex, npub: encodedNpub, nsec: encodedNsec })
                 // Wait for 3 seconds
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                
                 // publish here when signer is ready
-                await publishKind0Event(encodedNsec, publickeyHex)
-
-               
+                await publishKind0Event(keys.nsec, keys.hexpub)
                 setShowKeys(true)
                 setLoading(false)
             } else {
@@ -134,17 +141,15 @@ function OnBoard({ }: Props) {
         event.content = JSON.stringify(user),
             event.created_at = Math.floor(Date.now() / 1000);
         event.pubkey = publickey;
-        // console.log(event)
-        // console.log("signed...")
-        // console.log(event)
         event.sign(signer)
-        console.log(event)
         try {
             // Just publsih to purple pages??? 
             let publishedProfileEvent = await event.publish()
             //const publishedProfileEvent = await signPublishEvent(event);
             console.log(publishedProfileEvent)
+            toast.update("Account created!")
             toast.success("Welcome to Stargazr on Nostr!")
+            toast.info("Please mind your keys")
         } catch {
             toast.error("Problem creating your profile")
         }
@@ -221,15 +226,6 @@ function OnBoard({ }: Props) {
                     </div>
                 </div>
             </div> */}
-                {signer ? (
-                    // Render content when signer is available
-                    <button onClick={() => publishKind0Event(keys.nsec, keys.hexpub)}>
-                        Publish Kind 0 Event
-                    </button>
-                ) : (
-                    // Render a loading indicator or placeholder content
-                    <div>Loading...</div>
-                )}
                 <form className='w-full p-4'>
                     <div className='text-2xl font-normal mb-6'>Make Profile
                         <p className='text-sm text-slate-600 font-normal'>Some information about yourself.</p>
@@ -324,11 +320,11 @@ function OnBoard({ }: Props) {
                                 (<div className='flex flex-col justify-center'>
                                     <p className='text-sm text-red-500 font-semibold justify-center w-full'>Copy your keys and keep them somewhere safe for backup.</p>
                                     <p className='text-sm text-red-500 font-semibold mb-4 justify-center w-full'>Use them in the next step</p>
-                                    <div>
+                                    <div className='mb-4'>
                                         <label htmlFor="privatekey" className="block text-sm font-medium text-gray-700">
                                             Private Key - this is like your password - keep it safe and never share it.
                                         </label>
-                                        <div className="relative mt-1 rounded-md shadow-sm mb-4">
+                                        <div className="relative mt-1 rounded-md shadow-sm">
                                             <input
                                                 type="text"
                                                 name="privatekey"
@@ -342,7 +338,15 @@ function OnBoard({ }: Props) {
                                                 <DocumentDuplicateIcon className="h-5 w-5 text-gray-400 cursor" aria-hidden="true" />
                                             </div>
                                         </div>
+                                        <p
+                                            aria-live="polite"
+                                            id="email:helper"
+                                            className="mt-1 text-xs font-base text-slate-400"
+                                        >
+                                            Click to copy to your clipboard.
+                                        </p>
                                     </div>
+                                    
                                     <div>
                                         <label htmlFor="publickey" className="block text-sm font-medium text-gray-700">
                                             Public Key - this is like your username - people can find you with it.
@@ -364,6 +368,25 @@ function OnBoard({ }: Props) {
                                                 />
                                             </div>
                                         </div>
+                                        <p
+                                            aria-live="polite"
+                                            id="email:helper"
+                                            className="mt-1 text-xs font-base text-slate-400"
+                                        >
+                                            Click to copy to your clipboard.
+                                        </p>
+                                    </div>
+                                    <div className='mt-6 flex flex-row items-center h-5 justify-center mx-2 text-base'>
+                                        I've copied my keys to somewhere safe.
+                                        <input
+                                            id='albyDownloaded'
+                                            name='albyDownloaded'
+                                            type='checkbox'
+                                            onClick={() => {
+                                                setAlbyDownloaded(!albyDownloaded)
+                                            }}
+                                            className='focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mx-2'
+                                        />
                                     </div>
                                 </div>
                                 ) : (null)}

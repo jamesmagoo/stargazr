@@ -1,3 +1,4 @@
+import { HeartIcon, ShareIcon } from '@heroicons/react/20/solid';
 import { NDKEvent, NDKUserProfile, NostrEvent } from '@nostr-dev-kit/ndk';
 import { useNDK } from "@nostr-dev-kit/ndk-react";
 import { bech32 } from "bech32";
@@ -11,15 +12,14 @@ import ZapModal from '../components/ZapModal';
 import { useEvent } from '../context/EventContext';
 import { useUser } from '../context/UserContext';
 import ZapButton from './ZapButton';
-import { HeartIcon, ShareIcon } from '@heroicons/react/20/solid';
 
 
 const LyricsView = () => {
 
-  const { event, ndkEvents } = useEvent();
+  const { ndkEvents } = useEvent();
   const { eventID } = useParams()
 
-  const [nodeInfo, setNodeInfo] = useState('');
+  const [, setNodeInfo] = useState('');
   const [webln, setWebln] = useState<any>('');
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [currentEvent, setCurrentEvent] = useState<NDKEvent | null>(null)
@@ -80,13 +80,13 @@ const LyricsView = () => {
       if (user) {
         console.log(`User logged in we can zap.. ${user.npub}`)
         // make  zap request
-        const sender = user.npub;
+        // const sender = user.npub;
         const sats = 21;
         const amount = sats * 1000
         // TODO fill this in
         const comment = "I just wanted to be one of The Strokes..."
         if (currentEvent !== null) {
-          let result = await getZapRequest(currentEvent, sender, amount, comment);
+          let result = await getZapRequest(currentEvent, amount, comment);
           if (result) {
             toast.success("⚡️ ZAP !")
           } else {
@@ -107,7 +107,7 @@ const LyricsView = () => {
 
   };
 
-  const getZapRequest = async (note: NDKEvent, sender: string, amount: number, comment: string) => {
+  const getZapRequest = async (note: NDKEvent, amount: number, comment: string) => {
 
     let author = ndk?.getUser({ hexpubkey: `${note.pubkey}` })
     // use ndk to do this 
@@ -187,7 +187,7 @@ const LyricsView = () => {
         console.log("lud06 found")
         let { words } = bech32.decode(lud06, 1023)
         let data = bech32.fromWords(words)
-        lnurl = utils.utf8Decoder.decode(data)
+        lnurl = utils.utf8Decoder.decode(new Uint8Array(data))
       }
       else {
         return null;

@@ -1,6 +1,5 @@
-import React from 'react'
-import LyricsView from '../components/LyricsView'
 import CommentsList from '../components/CommentsList'
+import LyricsView from '../components/LyricsView'
 
 type Props = {}
 

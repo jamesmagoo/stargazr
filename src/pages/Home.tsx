@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { NDKFilter } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
-import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import LyricGridComponent from '../components/LyricGridComponent';
 import { useEvent } from '../context/EventContext';
