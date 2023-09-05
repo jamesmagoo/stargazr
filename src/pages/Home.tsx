@@ -19,7 +19,7 @@ const Home = () => {
 
   const filter: NDKFilter = {
     kinds: [30023],
-    "#t": ["lyric", "lyrics"],
+    "#t": ["music"],
   };
 
   useEffect(() => {

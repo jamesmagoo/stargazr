@@ -13,12 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <NDKProvider
       relayUrls={[
         "wss://purplepag.es",
-        "wss://nos.lol ",
 				"wss://relay.damus.io",
-				"wss://relay.nostr.band",
-				"wss://relayable.org",
-				"wss://nostr.rocks",
-				"wss://nostr.fmt.wiz.biz",
+        "wss://nostr.fmt.wiz.biz",
       ]}
     >
       <UserProvider>
