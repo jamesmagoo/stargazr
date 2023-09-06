@@ -1,6 +1,6 @@
 import { BoltIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../context/UserContext';
@@ -8,11 +8,12 @@ import LoginModal from './LoginModal';
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 
-
 const Navbar = () => {
     const { user, setUser, logout } = useUser();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const { ndk, loginWithNip07 } = useNDK();
+    const navigate = useNavigate();
+
 
     const handleCancelLoginModal = () => {
         setShowLoginModal(false);
@@ -41,7 +42,6 @@ const Navbar = () => {
                         setUser(newUser)
                         const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
                         toast.success(message)
-                        setUser(newUser)
                         console.log(newUser)
                     }
                 }).catch((err) => {
@@ -84,11 +84,15 @@ const Navbar = () => {
                         <span>Enter</span>
                     </button>
                 ) : (
-                    <div className='flex flex-row items-center space-x-10'>
-                        <div className='h-20 flex'>
+                    <div className='flex flex-row items-center space-x-10 cursor-pointer' onClick={() => navigate('/home')}>
+                        {user.profile?.image ? (
+                        <div className='h-20 flex pr-5'>
                             <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
-                        </div>
-                        <p>{user.profile?.displayName}</p>
+                        </div>) : (
+                        <div className='h-20 flex pr-5'>
+                            <img src={`/placeholders/placeholder-profile.png`} className='rounded-full border border-black shadow-sm'></img>
+                        </div>)}
+                        Profile
                         <button
                             type='button'
                             className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-sm text-sm font-medium rounded-md text-black bg-red-500 hover:bg-red-200'

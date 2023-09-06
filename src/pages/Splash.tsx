@@ -38,9 +38,9 @@ function Splash({ }: Props) {
       <div className=" mx-auto w-full flex-grow lg:flex xl:px-8 ">
         <div className="lg:w-1/2 w-full">
           <div className='w-full items-center space-y-4 p-4'>
-            <p className='lg:text-6xl text-5xl font-bold'>Artists give us lyrics.</p>
-            <h1 className='lg:text-6xl text-5xl font-medium'>Fans love them.</h1>
-            <h1 className='lg:text-6xl text-5xl font-extralight'>Let's get together.</h1>
+            <p className='xl:text-6xl lg:text-5xl font-bold'>Artists give us lyrics.</p>
+            <h1 className='xl:text-6xl lg:text-5xl font-medium'>Fans love them.</h1>
+            <h1 className='xl:text-6xl lg:text-5xl font-extralight'>Let's get together.</h1>
           </div>
 
           <div className='mt-4 p-4'>
@@ -59,7 +59,7 @@ function Splash({ }: Props) {
           </dl>
           </div>
         </div>
-        <div className='lg:w-1/2 lg:h-screen'>
+        <div className='lg:w-1/2 lg:h-auto flex items-center'>
           <OnBoard />
         </div>
         

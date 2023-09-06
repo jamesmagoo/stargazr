@@ -220,8 +220,8 @@ const LyricsView = () => {
           <p>Loading...</p>
         </div>
       ) : (
-        // Display content when loadingState is false
         // TODO hook up image url by using a hook to get placeholders / or use the image in the nsotr event - ternary
+        // TODO : make this tow rows, title & author on top, buttons and stats below
         <div className="flex min-h-screen flex-col items-center justify-center h-max">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>

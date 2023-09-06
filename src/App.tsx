@@ -11,6 +11,7 @@ import UserPage from "./pages/UserPage.tsx";
 import HomePageView from './pages/HomePageView.tsx';
 import LyricsDetailPage from './pages/LyricsDetailPage.tsx';
 import Splash from './pages/Splash.tsx';
+import PrivateRoute from './components/PrivateRoute.tsx';
 
 function App() {
 
@@ -24,7 +25,9 @@ function App() {
           <Route path='/lyrics' element={<Home />} />
           <Route path='/lyrics/lyric/:eventID' element={<LyricsDetailPage />} />
           <Route path='/publish' element={<PublishLyricsPage />} />
-          <Route path='/user' element={<UserPage />} />
+          <Route path='/home' element={<PrivateRoute />}>
+              <Route path='/home' element={<UserPage />} />
+            </Route>
           <Route path='/test' element={<HomePageView />} />
         </Routes>
         <ToastContainer
