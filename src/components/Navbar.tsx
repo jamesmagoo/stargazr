@@ -11,7 +11,7 @@ import { useNDK } from '@nostr-dev-kit/ndk-react';
 const Navbar = () => {
     const { user, setUser, logout } = useUser();
     const [showLoginModal, setShowLoginModal] = useState(false);
-    const { ndk, loginWithNip07 } = useNDK();
+    const { ndk, loginWithNip07, loginWithSecret } = useNDK();
     const navigate = useNavigate();
 
 
@@ -20,6 +20,9 @@ const Navbar = () => {
     };
 
     const handleLogin = async () => {
+        // first check if there is a wallet installed for login
+        // then check try and use the local storage keys 
+
         try {
             await login()
             setShowLoginModal(false)
@@ -31,22 +34,68 @@ const Navbar = () => {
     };
 
     const login = async () => {
-        let newUser: NDKUser | undefined
         try {
-            let res = await loginWithNip07()
+            await tryLogin()
+        } catch (err) {
+            
+        }
+    }
+
+    const tryLogin = async () => {
+        console.log("logging in with extension...")
+        let newUser: NDKUser | undefined
+        let res;
+        try {
+            res = await loginWithNip07()
+        } catch (err){
+            console.log(err)
+            console.log("attempting pk sign-in")
+            let nsec = localStorage.getItem("nsec")
+            if(nsec?.length != 0 && nsec != null){
+                await loginWithPrivateKey(nsec)
+            } else {
+                // TODO need to add a modal to accept a users npub/nsec for login
+                // for the case where there is no local stroage but they have keys
+                toast.info("Please create an account!")
+            }
+        }
+        
+        if (res != undefined) {
+            res.signer.user().then(async (user) => {
+                if (!!user.npub) {
+                    newUser = ndk?.getUser({ npub: `${user.npub}` })
+                    console.log(`Geting User for npub: ${user.npub}`)
+                    await newUser?.fetchProfile()
+                    setUser(newUser)
+                    const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
+                    toast.success(message)
+                    console.log(newUser)
+                }
+            }).catch((err) => {
+                console.log("Problem logging in: ", err)
+            })
+        }
+    }
+
+    const loginWithPrivateKey = async (nsec: string) => {
+        console.log("logging in with the users private key")
+        let newUser: NDKUser | undefined
+        let res
+        try {
+            res = await loginWithSecret(nsec)
             if (res != undefined) {
                 res.signer.user().then(async (user) => {
                     if (!!user.npub) {
                         newUser = ndk?.getUser({ npub: `${user.npub}` })
-                        await newUser?.fetchProfile()
                         setUser(newUser)
                         const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
                         toast.success(message)
                         console.log(newUser)
                     }
-                }).catch((err) => {
-                    console.log("Problem logging in: ", err)
                 })
+                    .catch((err) => {
+                        console.log("Problem logging in: ", err)
+                    })
             }
 
         } catch (err) {
@@ -86,12 +135,12 @@ const Navbar = () => {
                 ) : (
                     <div className='flex flex-row items-center space-x-10 cursor-pointer' onClick={() => navigate('/home')}>
                         {user.profile?.image ? (
-                        <div className='h-20 flex pr-5'>
-                            <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
-                        </div>) : (
-                        <div className='h-20 flex pr-5'>
-                            <img src={`/placeholders/placeholder-profile.png`} className='rounded-full border border-black shadow-sm'></img>
-                        </div>)}
+                            <div className='h-20 flex pr-5'>
+                                <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
+                            </div>) : (
+                            <div className='h-20 flex pr-5'>
+                                <img src={`/placeholders/placeholder-profile.png`} className='rounded-full border border-black shadow-sm'></img>
+                            </div>)}
                         Profile
                         <button
                             type='button'

@@ -70,9 +70,12 @@ const LoginModal = ({ showLoginModal, handleCancel, handleSubmit }: Props) => {
                   </Dialog.Title>
 
                   <div className='mt-2'>
-                    <p className='text-sm text-gray-500'>
-                      No wallet installed? Follow this easy set-up process at
-                    </p>
+                    <a className='text-sm text-gray-700'  href='https://getalby.com/' target='blank'>
+                      It's best to login with an extension like Alby.
+                    </a>
+                    <p className='text-sm text-gray-500'>You can set this up in 10 minutes.</p>
+                    <p className='text-sm text-gray-500'>If you don't have time now - login will still work ⤵️ </p>
+                    
                     <br />
 
                   </div>
@@ -83,7 +86,7 @@ const LoginModal = ({ showLoginModal, handleCancel, handleSubmit }: Props) => {
                       onClick={handleSubmit}
                       className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm'
                     >
-                      Connect Wallet
+                      Login
                     </button>
                     <button
                       type='button'

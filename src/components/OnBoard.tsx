@@ -1,14 +1,14 @@
 import { KeyIcon } from '@heroicons/react/20/solid';
-import { NDKEvent, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKKind, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUser } from '../context/UserContext';
+import Welcome from './Welcome';
 
 
-type Props = {}
 
 type KeyPair = {
     npub: string;
@@ -17,7 +17,7 @@ type KeyPair = {
     hexpriv: string;
 }
 
-function OnBoard({ }: Props) {
+function OnBoard() {
 
     /**
      * New Plan....
@@ -49,47 +49,28 @@ function OnBoard({ }: Props) {
     });
 
     const [loading, setLoading] = useState<boolean>(false);
-    // const isMounted = useRef(false)
+    const [onBoarded, setOnBoarded] = useState<boolean>(false)
 
-    // useEffect(() => {
-    //     const bootUpLogin = async () => {
-    //         // generate keys and login user 
-    //         const privatekeyHex = generatePrivateKey()
-    //         const publickeyHex = getPublicKey(privatekeyHex)
-    //         // encode keys 
-    //         let encodedNsec = nip19.nsecEncode(privatekeyHex)
-    //         let encodedNpub = nip19.npubEncode(publickeyHex)
-    //         await loginWithSecret(encodedNsec)
-    //         setKeys({ hexpub: publickeyHex, hexpriv: privatekeyHex, npub: encodedNpub, nsec: encodedNsec })
-    //     }
-
-    //     const storedNsec = localStorage.getItem('nsec');
-    //     const storedProfileName = localStorage.getItem('profileName')
-    //     if (storedNsec) {
-    //         let hexprivkey = convertKeyToHex(storedNsec)
-    //         let hexpubkey = getPublicKey(hexprivkey)
-    //         let encodedNpub = nip19.npubEncode(hexpubkey)
-    //         setKeys(() => ({ hexpriv: hexprivkey, hexpub: hexpubkey, npub: encodedNpub, nsec: storedNsec }));
-    //         setShowKeys(true)
-    //     } else {
-    //         if (!isMounted.current) {
-    //             bootUpLogin();
-    //             isMounted.current = true;
-    //         }
-    //     }
-
-    //     if (storedProfileName) {
-    //         setFormData((prevState) => ({
-    //             ...prevState,
-    //             username: storedProfileName,
-    //         }))
-    //     }
-    // }, []);
-
-    // TODO Function to update the progress width
-    // const updateProgress = (percentage: number) => {
-    //     setProgressWidth(percentage);
-    // };
+     useEffect(() => {
+        const storedNsec = localStorage.getItem('nsec');
+        const storedProfileName = localStorage.getItem('profileName');
+    
+        if (storedNsec) {
+            let hexprivkey = convertKeyToHex(storedNsec);
+            let hexpubkey = getPublicKey(hexprivkey);
+            let encodedNpub = nip19.npubEncode(hexpubkey);
+            setKeys(() => ({ hexpriv: hexprivkey, hexpub: hexpubkey, npub: encodedNpub, nsec: storedNsec }));
+            setOnBoarded(true);
+        }
+    
+        if (storedProfileName) {
+            setFormData((prevState) => ({
+                ...prevState,
+                username: storedProfileName,
+            }));
+        }
+    }, []);
+    
 
     const onChange = (e: any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -110,11 +91,13 @@ function OnBoard({ }: Props) {
                 let encodedNsec = nip19.nsecEncode(privatekeyHex)
                 let encodedNpub = nip19.npubEncode(publickeyHex)
                 // save to local storage
-                localStorage.setItem("nsec", privatekeyHex)
-                localStorage.setItem("profileName", formData.username)   
-                let newUser;        
-                loginWithSecret(encodedNsec).then((res) =>{
-                    if(res?.signer){
+                localStorage.setItem("nsec", encodedNsec)
+                localStorage.setItem("npub", encodedNpub)
+                localStorage.setItem("profileName", formData.username)
+                localStorage.setItem("onboarded", "true")
+                let newUser;
+                loginWithSecret(encodedNsec).then((res) => {
+                    if (res?.signer) {
                         res.signer.user().then(async (user) => {
                             if (!!user.npub) {
                                 newUser = ndk?.getUser({ npub: `${user.npub}` })
@@ -125,7 +108,7 @@ function OnBoard({ }: Props) {
                         })
                         publishNewUserProfile(res?.signer, publickeyHex)
                     }
-                }).catch((err)=>{
+                }).catch((err) => {
                     console.log("another fucking problem:", err)
                 })
                 setKeys({ hexpub: publickeyHex, hexpriv: privatekeyHex, npub: encodedNpub, nsec: encodedNsec })
@@ -138,7 +121,7 @@ function OnBoard({ }: Props) {
             }
         }
     }
-  
+
     const publishNewUserProfile = async (signer: NDKPrivateKeySigner, publickey: string) => {
         console.log("publishing kind 0")
         const event = new NDKEvent(ndk);
@@ -147,14 +130,14 @@ function OnBoard({ }: Props) {
             // "picture": null,
             // "about" : null
         }
-        event.kind = 0;
+        event.kind = NDKKind.Metadata;
         event.content = JSON.stringify(user),
-        event.created_at = Math.floor(Date.now() / 1000);
+            event.created_at = Math.floor(Date.now() / 1000);
         event.pubkey = publickey;
         let nostrevent = await event.toNostrEvent();
         event.sig = await signer.sign(nostrevent)
         console.log(event)
-        try {        
+        try {
             let publishedProfileEvent = await event.publish()
             console.log(publishedProfileEvent)
             toast.update("Account created!")
@@ -165,42 +148,21 @@ function OnBoard({ }: Props) {
     }
 
 
-    // function convertKeyToHex(value: string): string {
-    //     if (value && value.startsWith("nsec")) {
-    //         let decodedPrivateKey = nip19.decode(value);
-    //         return decodedPrivateKey.data as string;
-    //     }
-    //     if (value && value.startsWith("npub")) {
-    //         let decodedPublicKey = nip19.decode(value);
-    //         return decodedPublicKey.data as string;
-    //     }
-    //     return value;
-    // }
+    function convertKeyToHex(value: string): string {
+        if (value && value.startsWith("nsec")) {
+            let decodedPrivateKey = nip19.decode(value);
+            return decodedPrivateKey.data as string;
+        }
+        if (value && value.startsWith("npub")) {
+            let decodedPublicKey = nip19.decode(value);
+            return decodedPublicKey.data as string;
+        }
+        return value;
+    }
 
-    // const loginWithGeneratedKeys = async (nsec: string) => {
-    //     let newUser: NDKUser | undefined
-    //     try {
-    //         let res = await loginWithSecret(nsec)
-    //         if (res != undefined) {
-    //             res.signer.user().then(async (user) => {
-    //                 if (!!user.npub) {
-    //                     newUser = ndk?.getUser({ npub: `${user.npub}` })
-    //                     setUser(newUser)
-    //                     const message = formData.username ? `Welcome ${formData.username}` : 'Welcome';
-    //                     toast.success(message)
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.log("Problem logging in: ", err)
-    //             })
-    //         }
+  
 
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
-    return (
+    return onBoarded ? (<Welcome loading={loading} username={formData.username} />) : (
         <div className="splash-card w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-4">
             <div className='flex w-full justify-center mb-6'>
                 <h1 className='font-extralight text-5xl'>
@@ -209,7 +171,7 @@ function OnBoard({ }: Props) {
             </div>
             <div className='flex flex-col items-center space-y-3'>
                 <div className='italic font-light text-gray-500 text-lg'>Get started with just a profile name!</div>
-              
+
                 <form className='w-full p-4'>
                     <div className='text-2xl font-normal mb-6'>Create Profile
                         <p className='text-sm text-slate-600 font-normal'>Some information about yourself.</p>
@@ -296,52 +258,8 @@ function OnBoard({ }: Props) {
                             </button>
                         </div>
                     </div>
-
-
-
-                    {/* <div className='text-2xl font-normal mb-2 mt-6 border-t border-gray-500'>Add Alby
-                        <p className='text-sm text-slate-600 font-normal'>Alby is a browser extension that securely holds your keys - this takes ~4 minutes.</p>
-                        <div className='justify-center w-full mt-6 flex flex-col'>
-                            <div className='justify-center w-full flex'>
-                                <a
-                                    className="hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
-                                    href='https://getalby.com/' target='blank'>
-                                    <PlusIcon className="w-5 h-5 inline-block mr-2" />
-                                    Add Alby
-                                </a>
-                            </div>
-
-                            <div className='mt-6 flex flex-row items-center h-5 justify-center mx-2 text-base'>
-                                I've added Alby and stored my keys there.
-                                <input
-                                    id='albyDownloaded'
-                                    name='albyDownloaded'
-                                    type='checkbox'
-                                    onClick={() => {
-                                        setAlbyDownloaded(!albyDownloaded)
-                                    }}
-                                    className='focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mx-2'
-                                />
-                            </div>
-
-                        </div>
-                    </div> */}
                 </form>
-                {/* {albyDownloaded ?
-                    (<><p>You're done! You now have a Nostr profile which will get you into any app on Nostr!</p>
-                        <div className='flex flex-col justify-center w-min'>
-                            <button
-                                type='button'
-                                className='hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-sm text-sm font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-200'
-                                onClick={login}
-                            >
-                                <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
-                                <span>Login</span>
-                            </button>
-                        </div></>) :
-                    (null)} */}
             </div>
-
         </div>
     )
 }
