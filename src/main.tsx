@@ -6,15 +6,17 @@ import './index.css'
 import { EventProvider } from "./context/EventContext.tsx"
 import { UserProvider } from "./context/UserContext.tsx"
 
-// TODO : how to configure relays for prod? env ?
+//const relayUrls = import.meta.env.VITE_APP_relays.split(',') || [];
+const relayUrls : string[] = JSON.parse(import.meta.env.VITE_APP_relays);
+console.log(import.meta.env.VITE_APP_TITLE);
+console.log(relayUrls)
+
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <NDKProvider
-      relayUrls={[
-        //"wss://purplepag.es",
-				"ws://127.0.0.1:8080"
-      ]}
+      relayUrls={relayUrls}
     >
       <UserProvider>
       <EventProvider>
