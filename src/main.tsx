@@ -6,9 +6,8 @@ import './index.css'
 import { EventProvider } from "./context/EventContext.tsx"
 import { UserProvider } from "./context/UserContext.tsx"
 
-//const relayUrls = import.meta.env.VITE_APP_relays.split(',') || [];
 const relayUrls : string[] = JSON.parse(import.meta.env.VITE_APP_relays);
-console.log(import.meta.env.VITE_APP_TITLE);
+console.log("Rolling " + import.meta.env.VITE_APP_TITLE);
 console.log(relayUrls)
 
 

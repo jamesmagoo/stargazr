@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUser } from '../context/UserContext';
 import Welcome from './Welcome';
-
-
+import {logEvent} from 'firebase/analytics'
+import { analytics } from '../../firebase.config';
 
 type KeyPair = {
     npub: string;
@@ -116,6 +116,7 @@ function OnBoard() {
                 setLoading(false)
                 navigate("/home")
             } else {
+                logEvent(analytics, "clicked_with_no_name")
                 toast.info("Add your profile name")
                 return;
             }
@@ -140,6 +141,7 @@ function OnBoard() {
         try {
             let publishedProfileEvent = await event.publish()
             console.log(publishedProfileEvent)
+            logEvent(analytics, "new_nostr_profile_created")
             toast.update("Account created!")
             toast.success("Welcome to Stargazr on Nostr!")
         } catch {
@@ -174,7 +176,7 @@ function OnBoard() {
 
                 <form className='w-full p-4'>
                     <div className='text-2xl font-normal mb-6'>Create Profile
-                        <p className='text-sm text-slate-600 font-normal'>Some information about yourself.</p>
+                        <p className='text-base text-slate-600 font-normal'>What do you call yourself / your band / your stage name / your alter-ego?</p>
                     </div>
                     <div className='items-start w-full flex flex-col mt-1 mb-5'>
 

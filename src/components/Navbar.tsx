@@ -7,6 +7,8 @@ import { useUser } from '../context/UserContext';
 import LoginModal from './LoginModal';
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
+import {logEvent} from 'firebase/analytics'
+import { analytics } from '../../firebase.config';
 
 const Navbar = () => {
     const { user, setUser, logout } = useUser();
@@ -68,6 +70,7 @@ const Navbar = () => {
                     await newUser?.fetchProfile()
                     setUser(newUser)
                     const message = newUser?.profile ? `Welcome ${newUser.profile.displayName}` : 'Welcome';
+                    logEvent(analytics, "nip07_extension_login_success")
                     toast.success(message)
                     console.log(newUser)
                 }
@@ -109,7 +112,7 @@ const Navbar = () => {
                 <Link to={`/`}>
                     <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
                         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-black bg-white pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto  lg:rounded-xl lg:border lg:p-4">
-                            <b>stargazer -&nbsp; </b> explore lyrics & poetry
+                            <b>stargazr -&nbsp; </b> explore lyrics
                         </p>
                     </div>
                 </Link>
