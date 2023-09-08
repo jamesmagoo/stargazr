@@ -101,7 +101,7 @@ function OnBoard() {
         if (storedNsec) {
             setLoading(false)
         } else {
-            if (formData.username.length > 0 && selectedFile || profilePicLater) {
+            if (formData.username.length > 0 && (selectedFile || profilePicLater)) {
                 setLoading(true)
                 // generate keys and login user 
                 let picture_url = await handleUpload()
