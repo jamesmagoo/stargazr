@@ -141,7 +141,7 @@ const LyricsView = () => {
           // TODO : implement this e tag  
           ["e", "tag reference"],
           ["amount", String(sats)],
-          ["relays", "ws://127.0.0.1:8080"],
+          ["relays", JSON.parse(import.meta.env.VITE_APP_relays)],
           // TODO : implement lnurl py url of recipient 
           ["lnurl", String(author.profile?.lud16)]
         ],
@@ -216,26 +216,38 @@ const LyricsView = () => {
   return (
     <div>
       {loadingState ? ( // Display loading screen when loadingState is true
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-w-max h-max align-middle items-center justify-center">
           <p>Loading...</p>
         </div>
       ) : (
         // TODO hook up image url by using a hook to get placeholders / or use the image in the nsotr event - ternary
         // TODO : make this tow rows, title & author on top, buttons and stats below
-        <div className="flex min-h-screen flex-col items-center justify-center h-max">
+        <div className="flex flex-col justify-center items-center">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
-              <div className='flex items-center justify-between w-full h-24 p-4' 
-              style={{ backgroundImage: `url('${getRandomImage()}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                        {/* <div className='bg-black opacity-50 relative inset-0'></div> */}
-
-              {/* <div className='flex items-center justify-between w-full h-24 bg-red-200 p-4'> */}
-                <div className='flex flex-col items-start'>
-                  <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
-                  <p className='text-sm'>Artist Name</p>
+              <div className='flex items-center justify-center w-full h-24 p-4 rounded-lg' 
+              style={{ backgroundImage: `url('${getRandomImage()}')`, position:'relative', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className='flex flex-col items-center'>
+                  <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold line-clamp-2 backdrop-blur-lg p-2 text-yellow-400'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
+                  {/* TODO - get the profile of artist using the event npub?? */}
+                  {/* <p className='text-sm'>Artist Name</p> */}
                 </div>
+              </div>
 
-                <div className='flex items-center'>
+              <div className='my-10 mx-10 rounded-lg bg-white shadow-2xl font-light w-2/3 '>
+                <ReactMarkdown
+                  className='mx-10 space-y-2'
+                  children={currentEvent.content}
+                  components={{
+                    // Map `h1` (`# heading`) to use `h2`s.
+                    h1: 'h2',
+                    // Rewrite `em`s (`*like so*`) to `i` with a red foreground color.
+                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer bg-white text-lg' onClick={() => { console.log('Good lyric') }}{...props} />,
+                  }}
+                />
+              </div>
+
+              <div className='flex items-center justify-center w-full h-24 p-4' >
                   <button
                     type="button"
                     className="flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
@@ -263,22 +275,8 @@ const LyricsView = () => {
                   </button>
 
                   <ZapButton onClick={() => setShowZapModal(true)} />
-                </div>
+                
               </div>
-
-              <div className='my-10 border border-grey-500 rounded-lg '>
-                <ReactMarkdown
-                  className='font-mono mx-10 space-y-5'
-                  children={currentEvent.content}
-                  components={{
-                    // Map `h1` (`# heading`) to use `h2`s.
-                    h1: 'h2',
-                    // Rewrite `em`s (`*like so*`) to `i` with a red foreground color.
-                    p: ({ node, ...props }) => <div className='border border-grey-500 p-5 cursor-pointer bg-white hover:bg-sky-100' onClick={() => { console.log('Good lyric') }}{...props} />,
-                  }}
-                />
-              </div>
-
             </>
           ) : (
             // Display a message when currentEvent is null

@@ -82,11 +82,9 @@ function CommentsList({ }: Props) {
     }
 
     return (
-        <>
+        <div className="border border-slate-400 p-2 rounded-lg splash-card">
              <form onSubmit={onSubmit} method='POST'>
-                <div className='text-2xl'>Comments</div>
                 <div className="mb-6 m-2">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 ">Pick a prompt or just riff..</label>
                     <textarea
                         id="content"
                         name="content"
@@ -103,7 +101,7 @@ function CommentsList({ }: Props) {
                 <button
                     onClick={() => { getPlaceholderPrompt() }}
                     type="button"
-                    className="flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                    className="border-black border-2 flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                 >
                     <SparklesIcon className="w-5 h-5 inline-block mr-2" />
                     Get Another Prompt
@@ -115,7 +113,7 @@ function CommentsList({ }: Props) {
                     </button>
                 </div>
             </form>
-        </>
+        </div>
     )
 }
 

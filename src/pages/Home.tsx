@@ -1,4 +1,4 @@
-import { NDKFilter } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKFilter } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,6 +12,15 @@ const Home = () => {
   const { ndkEvents , setNDKEvents } = useEvent();
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
+  const getBackgroundImage = (event : NDKEvent) =>{
+    let imageUrlfound = event.tags.find((tag) => tag[0] === 'image')?.[1]
+    if(imageUrlfound != undefined && imageUrlfound?.length > 0 ){
+        return imageUrlfound
+    } else {
+        return getRandomImage()
+    }
+}
+
   const getRandomImage = () => {
     const randomIndex = Math.floor(Math.random() * 22) + 1;
     return `/placeholders/placeholder-${randomIndex}.png`;
@@ -19,7 +28,7 @@ const Home = () => {
 
   const filter: NDKFilter = {
     kinds: [30023],
-    "#t": ["music"],
+    "#t": ["lyrics","lyrics"],
   };
 
   useEffect(() => {
@@ -63,7 +72,7 @@ const Home = () => {
     <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4 h-auto'>
       {loadingState === true && <div key={1}>Loading...</div>}
       {loadingState === false && ndkEvents?.map((value, index) => (
-        <LyricGridComponent event={value} key={index} imageUrl={getRandomImage()} />
+        <LyricGridComponent event={value} key={index} imageUrl={getBackgroundImage(value)} />
       ))}
     </div>
 

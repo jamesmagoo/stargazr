@@ -7,7 +7,7 @@ import { useUser } from '../context/UserContext';
 import LoginModal from './LoginModal';
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
-import {logEvent} from 'firebase/analytics'
+import { logEvent } from 'firebase/analytics'
 import { analytics } from '../../firebase.config';
 
 const Navbar = () => {
@@ -39,7 +39,7 @@ const Navbar = () => {
         try {
             await tryLogin()
         } catch (err) {
-            
+
         }
     }
 
@@ -49,11 +49,11 @@ const Navbar = () => {
         let res;
         try {
             res = await loginWithNip07()
-        } catch (err){
+        } catch (err) {
             console.log(err)
             console.log("attempting pk sign-in")
             let nsec = localStorage.getItem("nsec")
-            if(nsec?.length != 0 && nsec != null){
+            if (nsec?.length != 0 && nsec != null) {
                 await loginWithPrivateKey(nsec)
             } else {
                 // TODO need to add a modal to accept a users npub/nsec for login
@@ -61,7 +61,7 @@ const Navbar = () => {
                 toast.info("Please create an account!")
             }
         }
-        
+
         if (res != undefined) {
             res.signer.user().then(async (user) => {
                 if (!!user.npub) {
@@ -142,7 +142,7 @@ const Navbar = () => {
                                 <img src={user.profile?.image} className='rounded-full border border-gray-100 shadow-sm'></img>
                             </div>) : (
                             <div className='h-20 flex pr-5'>
-                                <img src={`/placeholders/placeholder-profile.png`} className='rounded-full border border-black shadow-sm'></img>
+                                <img src={localStorage.getItem("profile_picture") || "/placeholders/placeholder-profile.png"} className='rounded-full border border-black shadow-sm'></img>
                             </div>)}
                         Profile
                         <button

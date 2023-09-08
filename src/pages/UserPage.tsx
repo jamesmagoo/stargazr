@@ -9,7 +9,7 @@ const UserPage = () => {
   const [progressWidth,] = useState<number>(50)
   const { user } = useUser();
 
-  const getnsecFromStorage = () =>{
+  const getnsecFromStorage = () => {
     return localStorage.getItem("nsec")
   }
 
@@ -138,7 +138,7 @@ const UserPage = () => {
           </div>
 
           <div className='mt-4 p-4'>
-             {/* <div className='text-2xl font-normal mb-2 mt-6 border-t border-gray-500'>Add Alby
+            {/* <div className='text-2xl font-normal mb-2 mt-6 border-t border-gray-500'>Add Alby
                         <p className='text-sm text-slate-600 font-normal'>Alby is a browser extension that securely holds your keys - this takes ~4 minutes.</p>
                         <div className='justify-center w-full mt-6 flex flex-col'>
                             <div className='justify-center w-full flex'>
@@ -165,8 +165,8 @@ const UserPage = () => {
 
                         </div>
                     </div> */}
-               
-                {/* {albyDownloaded ?
+
+            {/* {albyDownloaded ?
                     (<><p>You're done! You now have a Nostr profile which will get you into any app on Nostr!</p>
                         <div className='flex flex-col justify-center w-min'>
                             <button
@@ -185,7 +185,10 @@ const UserPage = () => {
           <div>
             {user ? (
               <div>
-                <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md'/>
+                {user.profile?.banner ? (
+                  null) : (
+                  <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md' />)}
+                <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md' />
                 <div className="flex items-center space-x-4 my-4">
                   <img src={user.profile?.image} alt="Profile Image" className="w-16 h-16 rounded-full" />
                   <div>

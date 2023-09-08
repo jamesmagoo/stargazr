@@ -33,14 +33,33 @@ function Splash({ }: Props) {
     },
   ]
 
+  /**
+   * 
+   * LANDING PAGE 101 - ANSWER ALL QUESTIONS
+   * 
+   * 1. what is it 
+   * 2. whats in for me ?
+   * 3. is it legit?
+   * 4. how do i get it?
+   */
+
+  /**
+   * Dive deep into the world of lyrics, discover hidden gems, and share your interpretations with fellow fans on this ultimate lyrics exploration platform.
+   */
+
+  /**
+   * Find your favorite artists and engage with them like never before, right here on Stargazr. Our decentralized platform ensures direct communication and supports the industry’s growth.
+   */
+
   return (
     <>
       <div className=" mx-auto w-full flex-grow lg:flex xl:px-8 ">
         <div className="lg:w-1/2 w-full">
           <div className='w-full items-center space-y-4 p-4'>
-            <p className='xl:text-6xl lg:text-5xl font-bold'>Artists give us lyrics.</p>
-            <h1 className='xl:text-6xl lg:text-5xl font-medium'>Fans love them.</h1>
-            <h1 className='xl:text-6xl lg:text-5xl font-extralight'>Let's get together.</h1>
+            <p className='xl:text-5xl lg:text-5xl font-bold'>Where Music Meets Imagination 🌌🎶</p>
+            {/* <h1 className='xl:text-6xl lg:text-5xl font-medium'>Fans love them</h1>
+            <h1 className='xl:text-6xl lg:text-5xl font-extralight'>Let's explore together</h1> */}
+            <p className='font-extralight text-3xl'>Let the stars guide you through an ever-expanding universe of lyrics.</p>
           </div>
 
           <div className='mt-4 p-4'>

@@ -11,6 +11,8 @@ type Props = {
 function LyricGridComponent({ event, imageUrl }: Props) {
     const { setEvent } = useEvent();
 
+  
+
     return (
         <Link to={`lyric/${event.id}`}
         onClick={()=>{setEvent(event)}}
