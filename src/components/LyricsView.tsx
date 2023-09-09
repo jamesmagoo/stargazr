@@ -5,7 +5,6 @@ import { bech32 } from "bech32";
 import { utils } from 'nostr-tools';
 import { useEffect, useState } from 'react';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { requestProvider } from 'webln';
 import ZapModal from '../components/ZapModal';
@@ -14,11 +13,14 @@ import { useUser } from '../context/UserContext';
 import ZapButton from './ZapButton';
 import Loading from '../pages/Loading';
 
+type Props = {
+  eventID : string | undefined;
+  event : NDKEvent | undefined | null ;
+}
 
-const LyricsView = () => {
+const LyricsView = ({eventID} : Props) => {
 
   const { ndkEvents } = useEvent();
-  const { eventID } = useParams()
 
   const [, setNodeInfo] = useState('');
   const [webln, setWebln] = useState<any>('');
@@ -64,7 +66,6 @@ const LyricsView = () => {
         setWebln(webln)
         console.log(`Connected to LN ⚡️ node info : ${nodeInfo.node.alias}`)
       } catch (err) {
-        console.log(err)
         console.log("Error connecting to webln")
       }
     }
