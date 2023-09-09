@@ -43,7 +43,7 @@ function LyricsDetailPage() {
                 <div className="lg:w-2/3 w-full">
                     <LyricsView eventID={eventID} event={currentEvent} />
                 </div>
-                <div className="lg:w-1/3 lg:h-screen bg-white shadow-2xl rounded-lg w-full ml-2">
+                <div className="lg:w-1/3 h-min bg-white shadow-2xl rounded-lg w-full ml-2">
                     <div className="m-auto">
                         <CommentsList eventID={eventID}  lyricsEvent={currentEvent || new NDKEvent}/>
                     </div>
