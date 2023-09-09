@@ -1,5 +1,4 @@
-import { EyeIcon } from "@heroicons/react/20/solid" 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     username : string;
