@@ -22,7 +22,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
 
     const filter: NDKFilter = {
         kinds: [1],
-        "#e": [`${lyricsEvent.id}`]
+        "#e": [`${eventID}`]
     };
 
     useMemo(() => {
@@ -93,6 +93,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     };
 
     const onSubmit = async (e: any) => {
+        setLoading(true)
         e.preventDefault();
         if (!user) {
             setLoading(false);
@@ -126,8 +127,8 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                 const updatedEvents = [...fetchedEvents, newCommentEvent];
                 setFetchedEvents(updatedEvents);
                 toast.success("Posted! 🎶✅")
+                setLoading(false)
             }
-
 
         }
     }
@@ -153,15 +154,36 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                         <button
                             onClick={() => { getPlaceholderPrompt() }}
                             type="button"
-                            className="border-black border-2 flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                            className="border-black border-2 flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 rounded-lg text-xs lg:text-sm xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                         >
                             <SparklesIcon className="w-5 h-5 inline-block mr-2" />
                             Get Another Prompt
                         </button>
                         <button
                             type="submit"
-                            className="text-white bg-blue-700 hover:bg-blue-800 w-min focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 block">
-                            Comment
+                            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                            >
+                            {loading ? (
+                                <div className="flex items-center">
+                                    <span className="animate-spin inline-block mr-2">
+                                        <svg
+                                            className="w-5 h-5"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                            />
+                                        </svg>
+                                    </span>
+                                    Loading...
+                                </div>
+                            ) : (<span>Comment</span>)}
                         </button>
                     </div>
                 </form>
@@ -174,7 +196,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             <div className="loading-spinner"></div>
                             <p>Loading comments...</p>
                         </div>
-                    ) : fetchedEvents  ? (
+                    ) : fetchedEvents ? (
                         // If events are fetched, display them
                         fetchedEvents.map((event) => (
                             <div key={event.id}>

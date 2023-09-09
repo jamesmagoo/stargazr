@@ -126,15 +126,19 @@ const Navbar = () => {
 
                 <div className='items-center flex flex-row'>
                     <div className='items-center flex flex-row'>
+                    <Link to={`publish`} >
                         <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
                             <PencilIcon className='mr-2 h-5 w-5' />
-                            <Link to={`publish`} className='text-lg'>Publish</Link>
+                            <div className='text-lg'>Publish</div>
                         </div>
+                    </Link>
 
+                    <Link to={`lyrics`}>
                         <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
                             <EyeIcon className='mr-2 h-5 w-5' />
-                            <Link to={`lyrics`}>Explore</Link>
+                            <div >Explore</div>
                         </div>
+                    </Link>
                     </div>
 
 
