@@ -42,7 +42,7 @@ const UserPage = () => {
 
   return (
     <div>
-      <div className="mx-auto w-full flex-grow lg:flex xl:px-8">
+      <div className="mx-auto w-full flex-grow lg:flex xl:px-8 h-full">
         <div className="m-4 splash-card lg:w-1/2 w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-4">
           <div className='w-full px-5 mb-8'>
             <div className="mt-2 " aria-hidden="true">

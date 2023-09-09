@@ -14,17 +14,17 @@ function Welcome({username, loading}: Props) {
   return (
     <div className="splash-card w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-4">
             <div className='flex w-full justify-center mb-6'>
-                <h1 className='font-extralight text-5xl'>
-                    Welcome back! <span className='italic font-light '>{username}</span>.
+                <h1 className='font-extralight lg:text-5xl text-3xl text-center'>
+                    Welcome back, <span className='italic font-light '>{username}</span>!
                 </h1>
             </div>
             <div className='flex flex-col items-center space-y-3'>
                 <div className='italic font-light text-gray-500 text-lg'>It's good to see you😍</div>
-
+                <div className='italic font-light text-gray-500 text-lg'>This party can't start without you - the Artist 🪩</div>
+                <div className='italic font-light text-gray-500 text-lg'>Please 😅 ⬇️</div>
                 <form className='w-full p-4'>
-                    <div className='items-start w-full flex flex-col mt-1 mb-5'>
-
-                       
+                    <div className='items-start w-full flex flex-col mb-5'>
+            
                         <div className='justify-center w-full my-6 flex'>
                             <button
                                 onClick={()=>{navigate("/publish")}}
@@ -53,8 +53,7 @@ function Welcome({username, loading}: Props) {
                                     </div>
                                 ) : (
                                     <>
-                                        <EyeIcon className="w-5 h-5 inline-block mr-2" />
-                                        Publish Your Lyrics
+                                       📝 Publish Your Lyrics
                                     </>
                                 )}
                             </button>

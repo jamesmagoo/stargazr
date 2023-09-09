@@ -4,6 +4,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
 import MarkdownPreview from "../components/MarkdownPreview";
+import { useNavigate } from "react-router-dom";
+import useNostrBuild from "../hooks/useNostrBuild";
 
 
 interface FormData {
@@ -14,16 +16,21 @@ interface FormData {
   tags: NDKTag[]
 }
 
+const MAX_FILE_SIZE_BYTES = 10485760;
+
 export default function PublishLyricsPage() {
 
   const { ndk } = useNDK();
+  const { handleUpload } = useNostrBuild()
+  const navigate = useNavigate()
   const { user } = useUser();
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     image: '',
-    summary: "Lyrics posted on stargazer",
+    summary: "Lyrics posted from stargazr.xyz",
     tags: [["t", "lyrics"]]
   });
 
@@ -38,6 +45,9 @@ export default function PublishLyricsPage() {
     }
 
     if (formData.content.length > 0 && formData.title.length > 0) {
+
+      let imageUrl = await uploadFile()
+
       const event = new NDKEvent(ndk);
       event.kind = 30023;
       event.created_at = Math.floor(Date.now() / 1000);
@@ -50,14 +60,9 @@ export default function PublishLyricsPage() {
         ["d", slug],
       ];
 
-      if (formData.image.length != 0) {
+      if (imageUrl !== undefined && imageUrl !== null && imageUrl.length != 0) {
         console.log("Image url provided")
-        if (isValidURL(formData.image)) {
-          newTags.push(["image", formData.image])
-        } else {
-          toast.error("The image URL provided is not valid - double check it")
-          return;
-        }
+        newTags.push(["image", imageUrl])
       }
 
 
@@ -80,23 +85,18 @@ export default function PublishLyricsPage() {
       event.content = markdownWithLineBreaks;
       let result = await event.publish();
       if (result) {
-        toast.success(`Published to Nostr! ${Array.from(result)[0]}`)
+        toast.success(`Published ${formData.title} !🪩🎤`)
+        toast.success(`Thank You! 💜`)
+        setLoading(false)
+        navigate("/lyrics")
       }
       // TODO remove 
       console.log(event)
     } else {
       toast.error("Please input a title & content")
+      setLoading(false)
     }
 
-  }
-
-  function isValidURL(url: string) {
-    try {
-      new URL(url);
-      return true;
-    } catch (_) {
-      return false;
-    }
   }
 
   const onChange = (e: any) => {
@@ -105,10 +105,32 @@ export default function PublishLyricsPage() {
 
   const markdownWithLineBreaks = formData.content.replace(/\n/g, '  \n');
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      if (e.target.files[0].size > MAX_FILE_SIZE_BYTES) {
+        setSelectedFile(null)
+        toast.error("File size too big!")
+        toast.info("Must be less than 10MB")
+      } else {
+        setSelectedFile(e.target.files[0]);
+      }
+    }
+
+  };
+
+  const uploadFile = async () => {
+    if (selectedFile) {
+      const uploadedUrl = await handleUpload(selectedFile);
+      if (uploadedUrl) {
+        console.log("got this back:", uploadedUrl)
+        return uploadedUrl
+      }
+    }
+  };
 
   return (
     <>
-      <div className="w-screen h-screen p-10 bg-blue-200">
+      <div className="w-screen h-screen p-10 ">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
@@ -127,14 +149,14 @@ export default function PublishLyricsPage() {
                       <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                         Title
                       </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
+                      <div className="mt-1 flex">
                         <input
                           type="text"
                           onChange={onChange}
                           required
                           name="title"
                           id="title"
-                          className="p-1 block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="p-1 block w-full border flex-1 rounded-lg border-black focus:border-indigo-500 focus:ring-indigo-500"
                           placeholder="Title"
                         />
                       </div>
@@ -145,15 +167,15 @@ export default function PublishLyricsPage() {
                     <label htmlFor="content" className="block text-sm font-medium text-gray-700">
                       Content
                     </label>
-                    <div className="mt-1">
+                    <div className="border border-black rounded-lg">
                       <textarea
                         id="content"
                         name="content"
                         onChange={onChange}
                         required
                         rows={24}
-                        className="p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Jesus in the day spa.."
+                        className="p-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        placeholder="I just wanted to be one of The Strokes..."
                         defaultValue={''}
                       />
                     </div>
@@ -162,33 +184,49 @@ export default function PublishLyricsPage() {
                     </p>
                   </div>
                   {markdownWithLineBreaks.length > 0 ?
-                    <MarkdownPreview markdownText={markdownWithLineBreaks} title={formData.title}/>
+                    <MarkdownPreview markdownText={markdownWithLineBreaks} title={formData.title} />
                     : null
                   }
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                        Link to Album Art/Cover Image (Optional)
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="image"
-                          id="image"
-                          onChange={onChange}
-                          className="p-1 block w-max flex-1 rounded-none rounded-r-md border-grey-900 border focus:border-indigo-500 focus:ring-indigo-500"
-                          placeholder="Link to image"
-                        />
-                      </div>
+                  <div className='my-4 w-full'>
+                    <label className="block text-sm font-medium text-gray-700"
+                      htmlFor="file_input">Upload imagery - this will appear with your lyrics (optional)
+                    </label>
+                    <div className="flex flex-row justify-between items-center">
+                      <input
+                        className="block text-sm focus:border-indigo-600 text-gray-900 border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none px-4 py-2.5  placeholder:text-text/50"
+                        id="file_input"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        type="file" />
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="bg-gray-50 px-4 py-3 text-right sm:px-6 flex justify-center">
+
                   <button
                     type="submit"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Publish
+                    className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
+                    {loading ? (
+                      <div className="flex items-center">
+                        <span className="animate-spin inline-block mr-2">
+                          <svg
+                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            />
+                          </svg>
+                        </span>
+                        Loading...
+                      </div>
+                    ) : (<span>🎶 Publish</span>)}
                   </button>
                 </div>
               </div>
