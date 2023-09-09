@@ -1,9 +1,9 @@
 import { SparklesIcon } from "@heroicons/react/20/solid";
-import { NDKEvent, NDKKind, NDKTag, NDKFilter } from '@nostr-dev-kit/ndk';
-import { useState, useEffect, useMemo } from "react";
+import { NDKEvent, NDKFilter, NDKKind, NDKTag } from '@nostr-dev-kit/ndk';
+import { useNDK } from "@nostr-dev-kit/ndk-react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
-import { useNDK } from "@nostr-dev-kit/ndk-react";
 
 
 type Props = {
