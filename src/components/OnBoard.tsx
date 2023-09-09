@@ -1,15 +1,15 @@
-import { KeyIcon } from '@heroicons/react/20/solid';
+import { FaceSmileIcon } from '@heroicons/react/24/outline';
 import { NDKEvent, NDKKind, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
+import axios from 'axios';
+import { logEvent } from 'firebase/analytics';
 import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { analytics } from '../../firebase.config';
 import { useUser } from '../context/UserContext';
 import Welcome from './Welcome';
-import { logEvent } from 'firebase/analytics'
-import { analytics } from '../../firebase.config';
-import axios from 'axios';
 
 type KeyPair = {
     npub: string;
@@ -105,7 +105,6 @@ function OnBoard() {
                 setLoading(true)
                 // generate keys and login user 
                 let picture_url = await handleUpload()
-                console.log("upload returned this:" + picture_url)
                 const privatekeyHex = generatePrivateKey()
                 const publickeyHex = getPublicKey(privatekeyHex)
                 // encode keys 
@@ -138,7 +137,7 @@ function OnBoard() {
                 navigate("/home")
             } else {
                 logEvent(analytics, "clicked_with_no_name")
-                toast.info("Add your profile name & picture or do later")
+                toast.info("Add your profile name / picture 😃")
                 return;
             }
         }
@@ -151,7 +150,6 @@ function OnBoard() {
             "name": formData.username
         }
         if (picture_url !== undefined && picture_url !== null) {
-            console.log("in the red zone...")
             user = {
                 ...user,
                 "picture": picture_url,
@@ -159,7 +157,7 @@ function OnBoard() {
         }
         event.kind = NDKKind.Metadata;
         event.content = JSON.stringify(user),
-            event.created_at = Math.floor(Date.now() / 1000);
+        event.created_at = Math.floor(Date.now() / 1000);
         event.pubkey = publickey;
         let nostrevent = await event.toNostrEvent();
         event.sig = await signer.sign(nostrevent)
@@ -222,17 +220,16 @@ function OnBoard() {
 
 
     return onBoarded ? (<Welcome loading={loading} username={formData.username} />) : (
-        <div className="splash-card w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-4">
-            <div className='flex w-full justify-center mb-6'>
+        <div className="splash-card w-120 h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500">
+            <div className='flex justify-center mb-6'>
                 <h1 className='font-extralight text-5xl'>
                     Ready to explore?
                 </h1>
             </div>
-            <div className='flex flex-col items-center space-y-3'>
+            <div className='flex flex-col items-center space-y-3 w-max'>
                 <div className='italic font-light text-gray-500 text-lg'>Get started with just a profile name!</div>
 
                 <form className='w-full p-4'>
-
 
                     <p className='text-base text-slate-600 font-normal'></p>
 
@@ -260,9 +257,8 @@ function OnBoard() {
                         >
                             You can change this later.
                         </p>
-                        {/* TODO - profile picture uploader - use placeholder for now */}
                         <div className='my-4 w-full'>
-                            <label className="block text-sm font-normal text-heading"
+                            <label className="block text-base mb-2 font-normal text-slate-600"
                                 htmlFor="file_input">Upload Profile Pic
                             </label>
                             <div className="flex flex-row justify-between items-center">
@@ -289,7 +285,7 @@ function OnBoard() {
                             <button
                                 onClick={createNostrProfile}
                                 disabled={loading}
-                                className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                                className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                             >
                                 {loading ? (
                                     <div className="flex items-center">
@@ -313,8 +309,8 @@ function OnBoard() {
                                     </div>
                                 ) : (
                                     <>
-                                        <KeyIcon className="w-5 h-5 inline-block mr-2" />
-                                        Create Profile
+                                        <FaceSmileIcon className="w-5 h-5 inline-block mr-2 hover:text-yellow-500" />
+                                        <span className='text-white hover:text-black'>Create Profile</span>
                                     </>
                                 )}
                             </button>

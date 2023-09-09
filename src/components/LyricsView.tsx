@@ -12,6 +12,7 @@ import ZapModal from '../components/ZapModal';
 import { useEvent } from '../context/EventContext';
 import { useUser } from '../context/UserContext';
 import ZapButton from './ZapButton';
+import Loading from '../pages/Loading';
 
 
 const LyricsView = () => {
@@ -216,9 +217,7 @@ const LyricsView = () => {
   return (
     <div>
       {loadingState ? ( // Display loading screen when loadingState is true
-        <div className="flex min-w-max h-max align-middle items-center justify-center">
-          <p>Loading...</p>
-        </div>
+          <Loading/>
       ) : (
         // TODO hook up image url by using a hook to get placeholders / or use the image in the nsotr event - ternary
         // TODO : make this tow rows, title & author on top, buttons and stats below
@@ -228,7 +227,7 @@ const LyricsView = () => {
               <div className='flex items-center justify-center w-full h-24 p-4 rounded-lg' 
               style={{ backgroundImage: `url('${getRandomImage()}')`, position:'relative', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className='flex flex-col items-center'>
-                  <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold line-clamp-2 backdrop-blur-lg p-2 text-yellow-400'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
+                  <p className='text-sm md:text-4xl lg:text-4xl xl:text-4xl font-extrabold line-clamp-2 backdrop-blur-lg p-2 text-y'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
                   {/* TODO - get the profile of artist using the event npub?? */}
                   {/* <p className='text-sm'>Artist Name</p> */}
                 </div>

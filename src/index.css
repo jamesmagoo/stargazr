@@ -40,8 +40,8 @@
 nav {
   background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
   @apply
-    py-4
-    px-20
+    py-1
+    px-10
     flex items-center gap-5 
     mb-5 mx-auto 
     border-b-2 border-black

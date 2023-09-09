@@ -70,11 +70,11 @@ const LoginModal = ({ showLoginModal, handleCancel, handleSubmit }: Props) => {
                   </Dialog.Title>
 
                   <div className='mt-2'>
-                    <a className='text-sm text-gray-700'  href='https://getalby.com/' target='blank'>
+                    <a className='underline text-sm text-indigo-700'  href='https://getalby.com/' target='blank'>
                       It's best to login with an extension like Alby.
                     </a>
-                    <p className='text-sm text-gray-500'>You can set this up in 10 minutes.</p>
-                    <p className='text-sm text-gray-500'>If you don't have time now - login will still work ⤵️ </p>
+                    <p className='text-sm text-gray-500 mb-2'>You can set this up in 10 minutes.</p>
+                    <p className='text-sm text-gray-500'>If you don't have time now - login anyway ⤵️ </p>
                     
                     <br />
 

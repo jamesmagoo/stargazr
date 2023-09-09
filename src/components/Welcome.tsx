@@ -27,7 +27,7 @@ function Welcome({username, loading}: Props) {
                        
                         <div className='justify-center w-full my-6 flex'>
                             <button
-                                onClick={()=>{navigate("/lyrics")}}
+                                onClick={()=>{navigate("/publish")}}
                                 disabled={loading}
                                 className="hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                             >
@@ -54,7 +54,7 @@ function Welcome({username, loading}: Props) {
                                 ) : (
                                     <>
                                         <EyeIcon className="w-5 h-5 inline-block mr-2" />
-                                        Explore Lyrics
+                                        Publish Your Lyrics
                                     </>
                                 )}
                             </button>
