@@ -36,6 +36,24 @@
   background: linear-gradient(to right, #fddb92 0%, #d1fdff 100%);
 }
 
+.comment-card {
+  @apply
+  transition-opacity duration-1000 animate-fadeIn
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out;
+}
+
 
 nav {
   background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);

@@ -211,6 +211,9 @@ const LyricsView = ({eventID} : Props) => {
   }
 
   const getRandomImage = () => {
+    if(currentEvent?.tags !== null){
+      return currentEvent?.tags.find(tag => tag[0] === 'image')?.[1]
+    }
     const randomIndex = Math.floor(Math.random() * 22) + 1;
     return `/placeholders/placeholder-${randomIndex}.png`;
   };

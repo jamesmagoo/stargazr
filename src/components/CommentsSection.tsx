@@ -17,6 +17,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     const { ndk } = useNDK();
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
+    const [ publishing, setPublishing] = useState(false)
     const [userCommentContent, setUserCommentContent] = useState<string>("")
     const [fetchedEvents, setFetchedEvents] = useState<NDKEvent[]>([]);
     const { fetchEvents } = useNDK();
@@ -103,10 +104,10 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     };
 
     const onSubmit = async (e: any) => {
-        setLoading(true)
+        setPublishing(true)
         e.preventDefault();
         if (!user) {
-            setLoading(false);
+            setPublishing(false);
             toast.error('Please login');
             return;
         }
@@ -136,8 +137,8 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
             if (result) {
                 const updatedEvents = [...fetchedEvents, newCommentEvent];
                 setFetchedEvents(updatedEvents);
-                toast.success("Posted! 🎶✅")
-                setLoading(false)
+                toast.success("Posted! 🎶 ✅")
+                setPublishing(false)
             }
 
         }
@@ -197,7 +198,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             type="submit"
                             className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                         >
-                            {loading ? (
+                            {publishing ? (
                                 <div className="flex items-center">
                                     <span className="animate-spin inline-block mr-2">
                                         <svg
@@ -215,7 +216,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                                             />
                                         </svg>
                                     </span>
-                                    Loading...
+                                    Sending...
                                 </div>
                             ) : (<span>Comment</span>)}
                         </button>
@@ -225,20 +226,22 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
             <div>
                 <div className="flex flex-col justify-center">
                     {loading ? (
-                        <div className=" items-center my-5 text-xl w-full text-center text-gray-500 font-light justify-center text-mono">
+                        <div className="animate-pulse items-center my-5 text-xl w-full text-gray-500 font-light justify-center flex flex-row">
+                            <div>
                             <Spinner/>
-                            <span>Loading...</span>
+                            </div>
+                            <div>Loading...</div>
                             </div>
 
                     ) : fetchedEvents.length > 0 ? (
                         // If events are fetched, display them
                         fetchedEvents.map((event) => (
-                            <div key={event.id} className="mx-2 text-sm space-y-3 w-auto p-2 my-2 bg-slate-200 rounded-lg border-black shadow-xl">
-                                <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-slate-500">
+                            <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-gray-900 bg-gradient-to-r from-teal-100 to-lime-100  rounded-lg border-black shadow-xl">
+                                <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-slate-300">
                                     <div className="text-sm font-bold mr-4">James</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>
                                 </div>
-                                <p className="text-base font-normal">{event.content}</p>
+                                <p className="text-base font-light">{event.content}</p>
                                 {/* <p className="text-md">{event.author.profile?.displayName}</p> */}
                                 {/* TODO add like , reply, zap, report buttons etc.... */}
                                 {/* <p className="text-md">Buttons</p> */}
