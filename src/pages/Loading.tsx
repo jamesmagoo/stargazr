@@ -6,7 +6,7 @@ import logo from '../assets/1eye.svg'
 const Loading = () => {
   return (
     <Fragment>
-    <div className='flex flex-col h-screen items-center justify-center w-screen'>
+    <div className='animate-pulse flex flex-col h-screen items-center justify-center w-screen'>
       {/* <img
         src={spinner}
         alt='Loading...'

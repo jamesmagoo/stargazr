@@ -4,6 +4,7 @@ import { useNDK } from "@nostr-dev-kit/ndk-react";
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserContext";
+import  useZap from "../hooks/useZap"
 import Spinner from "./Spinner";
 
 
@@ -21,7 +22,9 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     const [userCommentContent, setUserCommentContent] = useState<string>("")
     const [fetchedEvents, setFetchedEvents] = useState<NDKEvent[]>([]);
     const { fetchEvents } = useNDK();
+    const { handleZap } = useZap()
 
+ 
     const filter: NDKFilter = {
         kinds: [1],
         "#e": [`${eventID}`]
@@ -100,7 +103,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
 
 
     const onChange = (e: any) => {
-        setUserCommentContent(e.target.value,);
+        setUserCommentContent(e.target.value);
     };
 
     const onSubmit = async (e: any) => {
@@ -139,6 +142,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                 setFetchedEvents(updatedEvents);
                 toast.success("Posted! 🎶 ✅")
                 setPublishing(false)
+                setUserCommentContent("")
             }
 
         }
@@ -168,6 +172,16 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
         return formattedDate;
     }
 
+    // TODO make this better with modal default now to 21
+    const zapComment = async (note : NDKEvent) =>{
+       try {
+           handleZap(note, "stargazr.xyz", 21)
+        } catch (err){
+            toast.error("Problem zapping comment - the user may not have enabled zaps!")
+        }
+       
+    }
+
     return (
         <div>
             <div className="border p-2 border-slate-400 rounded-lg splash-card">
@@ -177,9 +191,9 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             id="content"
                             name="content"
                             onChange={onChange}
-
                             required
                             rows={4}
+                            value={userCommentContent}
                             className=" placeholder:text-lg block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                             placeholder={selectedPrompt}
                         >
@@ -224,7 +238,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                 </form>
             </div>
             <div>
-                <div className="flex flex-col justify-center">
+                <div className="flex flex-col justify-center overflow-y-auto">
                     {loading ? (
                         <div className="animate-pulse items-center my-5 text-xl w-full text-gray-500 font-light justify-center flex flex-row">
                             <div>
@@ -238,13 +252,13 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                         fetchedEvents.map((event) => (
                             <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-gray-900 bg-gradient-to-r from-teal-100 to-lime-100  rounded-lg border-black shadow-xl">
                                 <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-slate-300">
-                                    <div className="text-sm font-bold mr-4">James</div>
+                                    <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{event.author.profile? event.author.profile?.displayName : event.author.npub}</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>
                                 </div>
                                 <p className="text-base font-light">{event.content}</p>
                                 {/* <p className="text-md">{event.author.profile?.displayName}</p> */}
                                 {/* TODO add like , reply, zap, report buttons etc.... */}
-                                {/* <p className="text-md">Buttons</p> */}
+                                <button className="bg-white border border-black rounded p-0.5 text-xs font-semibold"onClick={()=>{zapComment(event)}}>Zap⚡️</button>
                                 {/* Other event details */}
                             </div>
                         )).reverse()
@@ -253,7 +267,6 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                     )}
                 </div>
             </div>
-
 
         </div>
     )
