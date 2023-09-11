@@ -181,7 +181,11 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
         }
        
     }
-
+    const getDisplayName = (comment : NDKEvent) =>{
+        //await comment.author.fetchProfile()
+        const commentDisplayName =  comment.author.profile?.displayName || comment.author.profile?.name || comment.author.npub
+        return commentDisplayName
+    }
     return (
         <div>
             <div className="border p-2 border-slate-400 rounded-lg splash-card">
@@ -252,7 +256,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                         fetchedEvents.map((event) => (
                             <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-gray-900 bg-gradient-to-r from-teal-100 to-lime-100  rounded-lg border-black shadow-xl">
                                 <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-slate-300">
-                                    <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{event.author.profile? event.author.profile?.displayName : event.author.npub}</div>
+                                    <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{getDisplayName(event)}</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>
                                 </div>
                                 <p className="text-base font-light">{event.content}</p>
