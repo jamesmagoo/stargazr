@@ -1,12 +1,13 @@
-import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
+import { DocumentDuplicateIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useUser } from '../context/UserContext';
 
+
 const UserPage = () => {
 
-  const [albyDownloaded, setAlbyDownloaded] = useState<boolean>(false)
-  const [progressWidth,] = useState<number>(50)
+  //const [albyDownloaded, setAlbyDownloaded] = useState<boolean>(false)
+  const [progressWidth, setProgressWidth] = useState<number>(50)
   const { user } = useUser();
 
   const getnsecFromStorage = () => {
@@ -24,21 +25,17 @@ const UserPage = () => {
     }
   }
 
-  // const onMutate = (e: any) => {
-  //     //Checkboxes
-  //     if (e.target.checked == true && e.target.type == 'checkbox') {
-  //         //checkbox was checked
-  //         setFormData((prevState) => ({
-  //             ...prevState,
-  //             [e.target.name]: true,
-  //         }));
-  //     } else {
-  //         setFormData((prevState) => ({
-  //             ...prevState,
-  //             [e.target.name]: false,
-  //         }));
-  //     }
-  // };
+  const onMutate = (e: any) => {
+      //Checkboxes
+      if (e.target.checked == true && e.target.type == 'checkbox') {
+          //checkbox was checked
+          setProgressWidth(75)
+          toast.success("Login in using your extension!")
+      } 
+  };
+
+  const userProfileImage = user?.profile?.image || localStorage.getItem("profile_picture") || "/placeholders/placeholder-profile.png";
+
 
   return (
     <div>
@@ -120,7 +117,7 @@ const UserPage = () => {
                     Click to copy to your clipboard.
                   </p>
                 </div>
-                <div className='mt-6 flex flex-row items-center h-5 justify-center mx-2 text-base'>
+                {/* <div className='mt-6 flex flex-row items-center h-5 justify-center mx-2 text-base'>
                   I've copied my keys to somewhere safe.
                   <input
                     id='albyDownloaded'
@@ -131,7 +128,7 @@ const UserPage = () => {
                     }}
                     className='focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mx-2'
                   />
-                </div>
+                </div> */}
               </div>
 
             </div>
@@ -185,12 +182,11 @@ const UserPage = () => {
           <div>
             {user ? (
               <div>
-                {user.profile?.banner ? (
-                  null) : (
-                  <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md' />)}
-                <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md' />
+                {/* {user.profile?.banner ? (
+                  <img src={banner} alt="Banner" className='border-2 border-black rounded-md' />) : (
+                  <img src={user.profile?.banner} alt="Banner" className='border-2 border-black rounded-md' />)} */}
                 <div className="flex items-center space-x-4 my-4">
-                  <img src={user.profile?.image} alt="Profile Image" className="w-16 h-16 rounded-full" />
+                  <img src={userProfileImage} className="w-16 h-16 rounded-full" />
                   <div>
                     <h1 className="text-xl font-semibold">{user.profile?.displayName}</h1>
                     <p className="text-gray-600">{user.profile?.name}</p>
@@ -198,17 +194,43 @@ const UserPage = () => {
                 </div>
                 <div>
 
-                  <h1 className="text-xl font-semibold">{user.profile?.displayName}</h1>
+                  <h1 className="text-xl font-semibold">{user.profile?.displayName ? user.profile?.displayName : localStorage.getItem("profileName") }</h1>
                   <p className="text-gray-600">{user.profile?.name}</p>
                   <p className="text-gray-700">{user.profile?.about}</p>
                   <p className="text-gray-700">{user.profile?.email}</p>
-                  <p className="text-gray-700">Website: {user.profile?.website}</p>
-                  <p className="text-gray-700">Lud16: {user.profile?.lud16}</p>
-                  <p className={`text-gray-700 ${user.profile?.nip05valid ? 'text-green-500' : 'text-red-500'}`}>
-                    Nip05 Valid: {user.profile?.nip05valid ? 'Yes' : 'No'}
-                  </p>
+                  {/* <p className="text-gray-700">Website: {user.profile?.website ?  user.profile?.website : "No webite set - go to profile settings."}</p> */}
+                  <p className="text-gray-700">{user.profile?.lud16}</p>
                 </div>
+                  <div className='text-2xl font-normal mb-2 mt-6 border-t border-gray-500'>Add Alby to Enable Zaps ⚡️
+                        <p className='text-sm text-slate-600 font-normal'>Alby is a browser extension that securely holds your keys - this takes ~10 minutes.</p>
+                        <p className='text-sm text-slate-600 font-normal mt-6'>1. Use the keys to the left and add them to your Alby wallet once you create an account.</p>
+                        <p className='text-sm text-slate-600 font-normal'>2. Once Alby is set up - logout and then log back in with the extension!</p>
+                        <p className='text-sm text-slate-600 font-normal'>3. Any problems - DM me on Twitter/X @J_magoo and I'll walk through it with you </p>
+                        <div className='justify-center w-full mt-6 flex flex-col'>
+                            <div className='justify-center w-full flex'>
+                                <a
+                                    className="hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                                    href='https://getalby.com/' target='blank'>
+                                    <PlusIcon className="w-5 h-5 inline-block mr-2" />
+                                    Add Alby
+                                </a>
+                            </div>
+
+                            <div className='mt-6 flex flex-row items-center h-5 justify-center mx-2 text-base'>
+                                I've added Alby and stored my keys there.
+                                <input
+                                    id='albyDownloaded'
+                                    name='albyDownloaded'
+                                    type='checkbox'
+                                    onChange={onMutate}
+                                    className='focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mx-2'
+                                />
+                            </div>
+
+                        </div>
+                    </div> 
               </div>
+            
             ) : (
               <div>Loading...</div>
             )}

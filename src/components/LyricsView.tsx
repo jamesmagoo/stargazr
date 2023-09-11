@@ -105,6 +105,7 @@ const LyricsView = ({ eventID }: Props) => {
           } else {
             setZapLoading(false)
             toast.error("Problem zapping 🫠 ")
+            toast.info("Are you sure you've installed Alby?")
           }
         }
       } else {

@@ -10,7 +10,6 @@ import { useUser } from '../context/UserContext';
 import { decode } from "light-bolt11-decoder";
 
 const useZap = () => {
-
     const [showZapModal, setShowZapModal] = useState(false);
     const [zapLoading, setZapLoading] = useState(false)
     const { ndk } = useNDK();
@@ -18,7 +17,12 @@ const useZap = () => {
     let webln : any = null ;
 
     const handleZap = async (eventToZap : NDKEvent, zapMessage: string, zapAmount : number) => {
-        webln = await requestProvider();
+        
+        try{
+            webln = await requestProvider();
+        } catch  {
+            toast.error("You need to install Alby!")
+        }
         setZapLoading(true)
         try {
           if (user) {
@@ -67,6 +71,7 @@ const useZap = () => {
       callback = await getZapEndpoint(author.profile);
       console.log("got a callback", callback)
       if (callback == null) {
+        toast.error("This user hasn't set up zaps!")
         return false;
       }
     } else {
