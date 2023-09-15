@@ -1,6 +1,7 @@
-import { BoltIcon, ChartBarIcon, FireIcon, MusicalNoteIcon } from '@heroicons/react/20/solid'
+import { BoltIcon, ChartBarIcon, FireIcon, MusicalNoteIcon , EyeIcon} from '@heroicons/react/20/solid'
 import { PuzzlePieceIcon, StarIcon } from '@heroicons/react/24/outline'
 import OnBoard from '../components/OnBoard'
+import { useNavigate } from 'react-router-dom'
 
 /**
    * 
@@ -58,18 +59,34 @@ const artistFeatures = [
 
 
 function Splash2() {
+
+  const navigate = useNavigate()
+
   return (
     <>
-      <div className="mx-auto w-full flex-grow lg:flex xl:px-8 justify-center">
+      <div 
+      className="mx-auto w-full flex-grow lg:flex xl:px-8 justify-center"
+      // style={{ backgroundImage: `url('${backgroundImagery}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
 
         <div className='flex-col items-center flex justify-center'>
-          <div className='xl:text-6xl text-5xl font-semibold mb-4'> Where Music Meets Imagination </div>
+          <div className='xl:text-7xl lg:text-5xl text-4xl font-bold mt-48 text-center'> Explore lyrics, interpretations &</div>
+          <div className='xl:text-7xl lg:text-5xl text-4xl font-bold mb-4 text-center'> connect with other fans 🌌</div>
           {/* <p className='font-extralight text-3xl'>Let the stars guide you through an ever-expanding universe of lyrics 🌌 🔭</p> */}
-          <p className='font-extralight text-xl w-1/2 mb-4 text-center'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, share your interpretations, and connect with a vibrant community of music lovers.</p>
-          <p className='font-light text-lg w-1/2 text-center'>Welcome to <span className='font-bold'>Stargazr</span> - Your Ultimate Lyric Exploration, Interpretation, and Fan Application! 🌟</p>
+          <p className=' font-medium lg:text-xl text-lg w-1/2 mb-4 text-center'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, share your interpretations, and connect with a vibrant <span className='font-bold'>community of music lovers.</span></p>
           {/* <div>
             <img src={logo} className='h-36 w-auto flex' />
           </div> */}
+          <div className='mt-36 mb-64'>
+            <button 
+            onClick={()=>{navigate("lyrics")}}
+            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
+              <>
+                <EyeIcon className="w-5 h-5 inline-block mr-2 hover:text-yellow-500" />
+                <span className='text-white hover:text-black'>Start Exploring</span>
+              </>
+            </button>
+          </div>
 
           <div className='flex flex-row w-screen mt-10 mb-12 justify-between'>
             <div className='w-full flex flex-col items-center mx-6'>
@@ -88,9 +105,9 @@ function Splash2() {
                 ))}
               </dl>
             </div>
-      
+
             <OnBoard />
-            
+
             <div className='w-full flex flex-col items-center mx-6'>
               <div className='font-extrabold text-3xl'>Artists 🎤</div>
               <dl className="max-w-xl flex flex-col space-y-10 lg:max-w-none p-4">

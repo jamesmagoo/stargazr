@@ -203,6 +203,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                         >
                         </textarea>
                     </div>
+                    {/* TODO disable/hide this when user is commenting  */}
                     <div className="flex items-center justify-between mx-2">
                         <button
                             onClick={() => { getPlaceholderPrompt() }}
