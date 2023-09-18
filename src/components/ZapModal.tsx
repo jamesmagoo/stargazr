@@ -85,22 +85,22 @@ const ZapModal = ({ showZapModal, handleCancel, handleZap, zapLoading }: Props) 
                                                 <div className='flex flex-row items-center w-full justify-evenly my-2'>
                                                     <button
                                                         onClick={(() => { setZapAmount(21) })}
-                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2'>
+                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'>
                                                         🥰 21
                                                     </button>
                                                     <button
                                                         onClick={(() => { setZapAmount(1000) })}
-                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2'>
+                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'>
                                                         🤘 1000
                                                     </button>
                                                     <button
                                                         onClick={(() => { setZapAmount(5000) })}
-                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2'>
+                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'>
                                                         🎸 5000
                                                     </button>
                                                     <button
                                                         onClick={(() => { setZapAmount(10000) })}
-                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2'>
+                                                        className='bg-purple-200 rounded-md border-black border font-bold p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'>
                                                         🤩 10k
                                                     </button>
                                                 </div>
