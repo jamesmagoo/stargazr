@@ -21,17 +21,12 @@ function LyricGridComponent({ event, imageUrl }: Props) {
         }
         >
             <div className="block relative">
-                {/* Semi-transparent background for text */}
                 <div className="absolute inset-0 bg-white bg-opacity-70 rounded-md blur-lg"></div>
-                {/* Text content */}
                 <div className="relative text-black z-1 p-2">
                     <h2 className="text-2xl mb-4 font-semibold">{event.tags.find((tag) => tag[0] === 'title')?.[1]}</h2>
                     <p className="text-black truncate text-ellipsis italic h-10 text-3xl">{event.content}</p>
                 </div>
             </div>
-            {/* <div className='my-2 flex flex-row bg-slate-500'>
-                <button></button>
-            </div> */}
         </Link>
     )
 }
