@@ -1,4 +1,4 @@
-import { BoltIcon, PencilIcon } from '@heroicons/react/20/solid';
+import { BoltIcon, MusicalNoteIcon, PencilIcon } from '@heroicons/react/20/solid';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { analytics } from '../../firebase.config';
 import logo from '../assets/1eye.svg'
 import { useUser } from '../context/UserContext';
-import LoginModal from './LoginModal';
+import OnBoardFlowModal from './OnBoardFlowModal'
 
 
 const Navbar = () => {
@@ -27,7 +27,6 @@ const Navbar = () => {
     const handleLogin = async () => {
         // first check if there is a wallet installed for login
         // then check try and use the local storage keys 
-
         try {
             await login()
             setShowLoginModal(false)
@@ -149,7 +148,7 @@ const Navbar = () => {
                             className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                             onClick={() => setShowLoginModal(true)}
                         >
-                            <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
+                            <MusicalNoteIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                             <span>Get Started</span>
                         </button>
                     ) : (
@@ -174,7 +173,8 @@ const Navbar = () => {
                     )}
                 </div>
             </nav>
-            <LoginModal handleCancel={handleCancelLoginModal} handleSubmit={handleLogin} showLoginModal={showLoginModal} />
+            <OnBoardFlowModal handleCancel={handleCancelLoginModal} handleLogin={handleLogin} showLoginModal={showLoginModal} />
+
         </>
     )
 }
