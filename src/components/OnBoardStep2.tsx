@@ -17,6 +17,7 @@ function OnBoardStep2({ onChange, formData }: Props) {
                 type="text"
                 id="username"
                 name="username"
+                required
                 onChange={onChange}
                 value={formData.username}
                 className="block w-full text-gray-900 border rounded-xl border-gray-300 focus:border-indigo-600 bg-white px-4 py-2.5 font-semibold text-heading placeholder:text-text/50 focus:border-primary focus:outline-none focus:ring-0 sm:text-sm"

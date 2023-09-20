@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/20/solid';
+import { XMarkIcon, ArrowLeftIcon } from '@heroicons/react/20/solid';
 import { NDKEvent, NDKKind, NDKPrivateKeySigner } from '@nostr-dev-kit/ndk';
 import axios from 'axios';
 import { logEvent } from 'firebase/analytics';
@@ -62,10 +62,10 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
 
   const cancelButtonRef = useRef(null);
   const [open, setOpen] = useState(true);
-  const { step, next, isFirstStep, isLastStep, currentStepIndex, steps } = useMultiStepForm([
+  const { step, next, isFirstStep, isLastStep, currentStepIndex, steps, back } = useMultiStepForm([
     <OnBoardStep1 handleLogin={handleLogin} />,
     <OnBoardStep2 onChange={onChange} formData={formData} />,
-    <OnBoardStep3 handleFileChange={handleFileChange} />,
+    <OnBoardStep3 handleFileChange={handleFileChange} selectedFile={selectedFile} />,
     // TODO these steps
     // <div>Follow some people</div>,
     // <div>Are you an artist or a fan?</div>
@@ -76,7 +76,6 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
     if (!isLastStep) return next();
     try {
       createNostrProfile();
-      toast.success(`Welcome ${formData.username}`)
     } catch {
       toast.error(`Problem creating profile`)
     }
@@ -119,7 +118,7 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
       navigate("/home")
     } else {
       logEvent(analytics, "clicked_with_no_name")
-      toast.info("Add your profile name / picture 😃")
+      toast.info("Add your profile name & picture 😃")
       return;
     }
 
@@ -247,12 +246,21 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
               </div>
               <div className="absolute top-0 left-0 hidden pt-4 pl-4 sm:block">
                 <div
-                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="rounded-md bg-white text-gray-600 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 
                 >
-                  <span>
-                    {isFirstStep ? null : (<p>Step {currentStepIndex} / {steps.length}</p>)}
-                  </span>
+                    <div>{isFirstStep ? null : (<p>Step {currentStepIndex} / {steps.length}</p>)}</div>
+                     
+                  {/* TODO - progress bar here growing in length would be cool */}
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 hidden pb-8 pl-4 sm:block">
+                <div
+                  className="rounded-md bg-white text-gray-600 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+
+                >
+                    <div>{isFirstStep ? null : (<div className='flex cursor-pointer' onClick={back} ><ArrowLeftIcon className="h-6 w-6" aria-hidden="true"/> Back</div>)}</div>
+                     
                   {/* TODO - progress bar here growing in length would be cool */}
                 </div>
               </div>
