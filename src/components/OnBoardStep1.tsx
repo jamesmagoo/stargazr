@@ -2,10 +2,10 @@ import logo from '../assets/1eye.svg'
 import { Dialog } from '@headlessui/react';
 
 type Props = {
-    handleSubmit(): any;
+    handleLogin(): any;
 }
 
-function OnBoardModalStep1({ handleSubmit }: Props) {
+function OnBoardStep1({ handleLogin }: Props) {
 
     return (
         <div>
@@ -23,21 +23,22 @@ function OnBoardModalStep1({ handleSubmit }: Props) {
                 >
                     I already have an account
                 </Dialog.Title>
-                <div className='w-full items-center '>
+                <div className='text-sm text-gray-500 mb-4 mt-2 '>
+                    We support <a className='underline text-sm text-indigo-700' href='https://getalby.com/' target='blank'> Alby </a>
+                    and <a className='underline text-sm text-indigo-700' href='https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp' target='blank'> Nos2x </a>
+                    browser extensions.
+                </div>
+                <div className='w-full items-center mb-8 '>
                     <button
                         type='button'
-                        onClick={handleSubmit}
+                        onClick={handleLogin}
                         className='cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 border-black border-2 text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 rounded-md shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium focus:ring-offset-2'
                     >
                         Login With Extension
                     </button>
                 </div>
 
-                <div className='text-sm text-gray-500 mb-4 mt-2 '>
-                    We support <a className='underline text-sm text-indigo-700' href='https://getalby.com/' target='blank'> Alby </a>
-                    and <a className='underline text-sm text-indigo-700' href='https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp' target='blank'> Nos2x </a>
-                    browser extensions.
-                </div>
+
             </div>
             <div className='border border-b-2 border-black' />
             <div className='mt-3 text-center sm:mt-5'>
@@ -45,10 +46,13 @@ function OnBoardModalStep1({ handleSubmit }: Props) {
                     as='h3'
                     className='text-lg leading-6 font-medium text-gray-900 my-2'
                 >
-                    I want to get started
+                    Create Account
                 </Dialog.Title>
+                <div className='text-sm text-gray-500 mb-2 mt-2 '>
+                    You don't have an account? No problem! We can create one in a minute.
+                </div>
 
-                <div className='w-full items-center '>
+                {/* <div className='w-full items-center '>
                     <button
                         type='button'
                         onClick={handleSubmit}
@@ -56,13 +60,11 @@ function OnBoardModalStep1({ handleSubmit }: Props) {
                     >
                         Create An Account
                     </button>
-                </div>
-                <div className='text-sm text-gray-500 mb-2 mt-2 '>
-                   Blah blah balh
-                </div>
+                </div> */}
+
             </div>
         </div>
     )
 }
 
-export default OnBoardModalStep1
+export default OnBoardStep1

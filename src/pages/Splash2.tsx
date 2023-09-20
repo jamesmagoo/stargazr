@@ -70,10 +70,10 @@ function Splash2() {
       >
 
         <div className='flex-col items-center flex justify-center'>
-          <div className='xl:text-7xl lg:text-5xl text-4xl font-bold mt-48 text-center'> Explore lyrics, interpretations &</div>
-          <div className='xl:text-7xl lg:text-5xl text-4xl font-bold mb-4 text-center'> connect with other fans 🌌</div>
+          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mt-48 text-center balance-card'> Explore lyrics, interpretations &</div>
+          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mb-8 text-center'> connect with other fans 🌌</div>
           {/* <p className='font-extralight text-3xl'>Let the stars guide you through an ever-expanding universe of lyrics 🌌 🔭</p> */}
-          <p className=' font-medium lg:text-xl text-lg w-1/2 mb-4 text-center'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, share your interpretations, and connect with a vibrant <span className='font-bold'>community of music lovers.</span></p>
+          <p className=' lg:text-base md:text-base text-base w-1/2 mb-4 text-center balance-card text-slate-600'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, share your interpretations, and connect with a vibrant <span className='font-bold'>community of music lovers.</span></p>
           {/* <div>
             <img src={logo} className='h-36 w-auto flex' />
           </div> */}

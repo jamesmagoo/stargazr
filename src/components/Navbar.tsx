@@ -27,7 +27,6 @@ const Navbar = () => {
     const handleLogin = async () => {
         // first check if there is a wallet installed for login
         // then check try and use the local storage keys 
-
         try {
             await login()
             setShowLoginModal(false)
@@ -174,7 +173,7 @@ const Navbar = () => {
                     )}
                 </div>
             </nav>
-            <OnBoardFlowModal handleCancel={handleCancelLoginModal} handleSubmit={handleLogin} showLoginModal={showLoginModal} />
+            <OnBoardFlowModal handleCancel={handleCancelLoginModal} handleLogin={handleLogin} showLoginModal={showLoginModal} />
 
         </>
     )
