@@ -7,7 +7,7 @@ import { UserProvider } from './context/UserContext.tsx';
 import './index.css';
 import Home from "./pages/Home.tsx";
 import PublishLyricsPage from './pages/PublishLyricsPage.tsx';
-import UserPage from "./pages/UserPage.tsx";
+import UserPage2 from "./pages/UserPage2.tsx";
 import HomePageView from './pages/HomePageView.tsx';
 import LyricsDetailPage from './pages/LyricsDetailPage.tsx';
 import Splash2 from './pages/Splash2.tsx';
@@ -27,7 +27,7 @@ function App() {
           <Route path='/lyrics/lyric/:eventID' element={<LyricsDetailPage />} />
           <Route path='/publish' element={<PublishLyricsPage />} />
           <Route path='/home' element={<PrivateRoute />}>
-              <Route path='/home' element={<UserPage />} />
+              <Route path='/home' element={<UserPage2 />} />
             </Route>
           <Route path='/test' element={<HomePageView />} />
         </Routes>
