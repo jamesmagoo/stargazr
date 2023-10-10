@@ -24,7 +24,7 @@
 }
 
 .splash-card {
-  background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
+  background: linear-gradient(to top, #020320 0%, #4647B1 100%);
 }
 
 .splash-icon {
@@ -53,9 +53,17 @@
   animation: fadeIn 1s ease-out;
 }
 
+/**
+#020320
+#0F1052
+#25267F
+#4647B1
+#6F6FDD
+**/
+
 
 nav {
-  background: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
+  background: transparent;
   @apply
     py-1
     px-10
@@ -66,19 +74,22 @@ nav {
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  color: white;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #4647B1;
 }
 
 body {
   margin: 0;
   display: flex;
   place-items: center;
-  background: whitesmoke;
+  background: black;
+  background-image: linear-gradient(to bottom, transparent 0%, black 100%),url('/public/starrysky_black.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 h1 {
@@ -86,37 +97,3 @@ h1 {
   line-height: 1.1;
 }
 
-/* button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-} */
-
-/* button {
-  @apply 
-    px-3 py-2 
-    rounded-sm 
-    flex justify-between items-center gap-2
-    text-sm
-    bg-yellow-600;
-} */
-
-
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */

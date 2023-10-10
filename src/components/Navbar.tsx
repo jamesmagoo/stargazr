@@ -110,15 +110,15 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className='justify-between'>
+            <nav className='justify-between mt-6'>
                 <Link to={`/`}>
                     <div className="items-center justify-between font-mono text-3xl flex flex-row">
-                        <img
+                        {/* <img
                             className='block h-20 w-auto'
                             src={logo}
                             alt='Workflow'
-                        />
-                        stargazr
+                        /> */}
+                        🔭stargazr
                     </div>
                 </Link>
 
@@ -126,14 +126,14 @@ const Navbar = () => {
                 <div className='items-center flex flex-row'>
                     <div className='items-center flex flex-row'>
                     <Link to={`publish`} >
-                        <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
+                        <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-white bg-gradient-to-r from-indigo-500 to-indigo-950  focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
                             <PencilIcon className='mr-2 h-5 w-5' />
                             <div className='text-lg'>Publish</div>
                         </div>
                     </Link>
 
                     <Link to={`lyrics`}>
-                        <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
+                        <div className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-white bg-gradient-to-r from-indigo-500 to-indigo-950  focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
                             <EyeIcon className='mr-2 h-5 w-5' />
                             <div >Explore</div>
                         </div>
@@ -145,7 +145,7 @@ const Navbar = () => {
                     {user === undefined ? (
                         <button
                             type='button'
-                            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  bg-white text-black focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                             onClick={() => setShowLoginModal(true)}
                         >
                             <MusicalNoteIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />

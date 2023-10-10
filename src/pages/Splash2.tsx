@@ -70,10 +70,10 @@ function Splash2() {
       >
 
         <div className='flex-col items-center flex justify-center'>
-          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mt-48 text-center balance-card'> Explore lyrics, interpretations &</div>
-          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mb-8 text-center'> connect with other fans 🌌</div>
+          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mt-48 text-center balance-card text-white'> Explore lyrics, interpretations &</div>
+          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mb-8 text-center text-white'> connect with other fans 🌌</div>
           {/* <p className='font-extralight text-3xl'>Let the stars guide you through an ever-expanding universe of lyrics 🌌 🔭</p> */}
-          <p className=' lg:text-base md:text-base text-base w-1/2 mb-4 text-center balance-card text-slate-600'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, share your interpretations, and connect with a vibrant <span className='font-bold'>community of music lovers.</span></p>
+          <p className=' lg:text-2xl md:text-2xl text-base w-2/3 mb-4 text-center balance-card text-slate-100'>Dive deeper into the world of music. Uncover the stories behind your favorite songs, <span  className='font-extrabold bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 text-transparent bg-clip-text'>share your interpretations</span>, and connect with a vibrant <span className='font-extrabold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text'>community of music lovers.</span></p>
           {/* <div>
             <img src={logo} className='h-36 w-auto flex' />
           </div> */}
@@ -90,17 +90,17 @@ function Splash2() {
 
           <div className='flex flex-row w-screen mt-10 mb-12 justify-between'>
             <div className='w-full flex flex-col items-center mx-6'>
-              <div className='font-extrabold text-3xl'>Fans 🤘</div>
+              <div className='font-extrabold text-3xl text-white'>Fans 🤘</div>
               <dl className="max-w-xl flex flex-col space-y-5 lg:max-w-none p-4">
                 {fanFeatures.map((feature) => (
                   <div key={feature.name} className="relative pl-16">
-                    <dt className="text-lg font-semibold text-gray-900">
+                    <dt className="text-lg font-semibold text-white">
                       <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg splash-icon border-black border-2">
-                        <feature.icon className="h-6 w-6 text-black" aria-hidden="true" />
+                        <feature.icon className="h-6 w-6  text-black" aria-hidden="true" />
                       </div>
                       <p>{feature.name}</p>
                     </dt>
-                    <dd className="text-base text-gray-600">{feature.description}</dd>
+                    <dd className="text-base text-gray-200">{feature.description}</dd>
                   </div>
                 ))}
               </dl>
@@ -108,8 +108,8 @@ function Splash2() {
 
             <OnBoard />
 
-            <div className='w-full flex flex-col items-center mx-6'>
-              <div className='font-extrabold text-3xl'>Artists 🎤</div>
+            <div className='gradient w-full flex flex-col items-center mx-6'>
+              <div className='font-extrabold text-3xl text-white'>Artists 🎤</div>
               <dl className="max-w-xl flex flex-col space-y-10 lg:max-w-none p-4">
                 {artistFeatures.map((feature) => (
                   <div key={feature.name} className="relative pl-16">
