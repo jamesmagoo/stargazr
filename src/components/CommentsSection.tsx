@@ -188,7 +188,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     }
     return (
         <div>
-            <div className="border p-2 border-slate-400 rounded-lg splash-card">
+            <div className="border p-2 border-black rounded-lg bg-gray-800">
                 <form onSubmit={onSubmit} method='POST'>
                     <div className="mb-6 m-2">
                         <textarea
@@ -198,7 +198,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             required
                             rows={4}
                             value={userCommentContent}
-                            className=" placeholder:text-lg block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                            className=" placeholder:text-lg block p-2.5 w-full text-sm text-white bg-gray-900 rounded-lg border border-black focus:ring-blue-900 focus:border-blue-900"
                             placeholder={selectedPrompt}
                         >
                         </textarea>
@@ -208,14 +208,14 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                         (<button
                             onClick={() => { getPlaceholderPrompt() }}
                             type="button"
-                            className="border-black border-2 flex items-center h-10  text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 rounded-lg text-xs lg:text-sm xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                            className="border-black border-2 flex items-center h-10 text-white bg-gradient-to-l from-indigo-500 to-indigo-950  rounded-lg text-xs lg:text-sm xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                         >
                             <SparklesIcon className="w-5 h-5 inline-block mr-2" />
                             Get Another Prompt
                         </button>) :null}
                         <button
                             type="submit"
-                            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
+                            className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                         >
                             {publishing ? (
                                 <div className="flex items-center">
@@ -255,15 +255,15 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                     ) : fetchedEvents.length > 0 ? (
                         // If events are fetched, display them
                         fetchedEvents.map((event) => (
-                            <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-gray-900 bg-gradient-to-r from-teal-100 to-lime-100  rounded-lg border-black shadow-xl">
-                                <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-slate-300">
+                            <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-slate-200 bg-gray-800 rounded-lg border-black shadow-xl">
+                                <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-black">
                                     <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{getDisplayName(event)}</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>
                                 </div>
                                 <p className="text-base font-light">{event.content}</p>
                                 {/* <p className="text-md">{event.author.profile?.displayName}</p> */}
                                 {/* TODO add like , reply, zap, report buttons etc.... */}
-                                <button className="bg-white border border-black rounded p-0.5 text-xs font-semibold"onClick={()=>{zapComment(event)}}>Zap⚡️</button>
+                                <button className="bg-gray-600 border border-black rounded p-0.5 text-xs font-semibold"onClick={()=>{zapComment(event)}}>Zap⚡️</button>
                                 {/* Other event details */}
                             </div>
                         )).reverse()

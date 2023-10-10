@@ -300,7 +300,7 @@ const LyricsView = ({ eventID }: Props) => {
         <div className="flex flex-col justify-center items-center">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
-              <div className='flex items-center justify-center w-full p-4 rounded-lg h-48 border border-slate-400'
+              <div className='flex items-center justify-center w-full p-4 rounded-lg h-48 border border-black'
                 style={{ backgroundImage: `url('${getImage()}')`, position: 'relative', backgroundSize: 'cover', backgroundPosition: 'center' }}>
               </div>
               <div className='flex items-center justify-center w-full h-24 p-4 rounded-lg' >
@@ -312,7 +312,7 @@ const LyricsView = ({ eventID }: Props) => {
                 </div>
               </div>
 
-              <div className='my-10 mx-10 rounded-lg bg-white shadow-2xl font-light w-4/5 '>
+              <div className='my-10 mx-10 rounded-lg shadow-2xl font-light w-4/5'>
                 <ReactMarkdown
                   className='mx-10 space-y-2'
                   children={currentEvent.content}
@@ -320,7 +320,7 @@ const LyricsView = ({ eventID }: Props) => {
                     // Map `h1` (`# heading`) to use `h2`s.
                     h1: 'h2',
                     // Rewrite `em`s (`*like so*`) to `i` with a red foreground color.
-                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer bg-white text-lg' onClick={() => { console.log('Good lyric') }}{...props} />,
+                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer text-slate-300 text-lg font-medium' onClick={() => { console.log('Good lyric') }}{...props} />,
                   }}
                 />
               </div>

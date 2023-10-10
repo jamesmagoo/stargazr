@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { analytics } from '../../firebase.config';
-import logo from '../assets/1eye.svg'
+// import logo from '../assets/1eye.svg'
 import { useUser } from '../context/UserContext';
 import OnBoardFlowModal from './OnBoardFlowModal'
 
