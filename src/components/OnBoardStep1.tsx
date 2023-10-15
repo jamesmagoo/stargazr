@@ -1,4 +1,4 @@
-import logo from '../assets/1eye.svg'
+import logo from '../assets/stargazr.svg'
 import { Dialog } from '@headlessui/react';
 
 type Props = {

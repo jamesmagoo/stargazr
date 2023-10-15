@@ -2,7 +2,7 @@
 const Footer = () => {
   return (
     <footer>
-      <div className='mx-auto py-2 px-4 overflow-hidden sm:px-6 lg:px-8 bg-gray-200'>
+      <div className='mx-auto py-2 px-4 overflow-hidden sm:px-6 lg:px-8'>
         <p className='mt-2 text-center text-sm font-base text-gray-600'>
           &copy; 2023 Stargazr
         </p>

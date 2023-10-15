@@ -297,30 +297,30 @@ const LyricsView = ({ eventID }: Props) => {
         <Loading />
       ) : (
         // TODO : make this tow rows, title & author on top, buttons and stats below
-        <div className="flex flex-col justify-center items-center">
+        <div className="justify-center items-center">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
-              <div className='flex items-center justify-center w-full p-4 rounded-lg h-48 border border-slate-400'
+              <div className='flex items-center justify-center w-full p-4 rounded-lg h-48 border border-black'
                 style={{ backgroundImage: `url('${getImage()}')`, position: 'relative', backgroundSize: 'cover', backgroundPosition: 'center' }}>
               </div>
               <div className='flex items-center justify-center w-full h-24 p-4 rounded-lg' >
                 <div className='flex flex-col items-center'>
-                  <p className='border border-black rounded-xl text-center text-sm md:text-4xl lg:text-4xl xl:text-4xl font-bold line-clamp-2 backdrop-blur-lg p-2 text-y'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
+                  <p className='text-white border border-black rounded-xl text-center text-sm md:text-4xl lg:text-4xl xl:text-4xl font-bold line-clamp-2 backdrop-blur-lg p-2 text-y'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
                   {/* TODO - get the profile of artist using the event npub?? */}
                   <p className='text-sm'>{currentEvent.author.profile ? currentEvent.author.profile?.displayName : "Artist"}</p>
                   <ZapButton onClick={() => setShowZapModal(true)} />
                 </div>
               </div>
 
-              <div className='my-10 mx-10 rounded-lg bg-white shadow-2xl font-light w-4/5 '>
+              <div className='my-10 rounded-lg shadow-2xl font-light w-4/5 mx-auto justify-right'>
                 <ReactMarkdown
-                  className='mx-10 space-y-2'
+                  className='space-y-2'
                   children={currentEvent.content}
                   components={{
                     // Map `h1` (`# heading`) to use `h2`s.
                     h1: 'h2',
                     // Rewrite `em`s (`*like so*`) to `i` with a red foreground color.
-                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer bg-white text-lg' onClick={() => { console.log('Good lyric') }}{...props} />,
+                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer text-slate-300 text-lg font-medium' onClick={() => { console.log('Good lyric') }}{...props} />,
                   }}
                 />
               </div>

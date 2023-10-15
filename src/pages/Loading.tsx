@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-import logo from '../assets/1eye.svg'
+import logo from '../assets/stargazr.svg'
 
 
 
@@ -13,7 +13,7 @@ const Loading = () => {
         style={{ width: '64px', margin: 'auto', display: 'block' }}
       /> */}
       <img 
-      className="w-auto h-48"
+      className="w-auto h-96"
       src={logo} alt='Loading' />
       <h1 className='flex flex-row'>Loading..</h1>
     </div>

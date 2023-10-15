@@ -28,7 +28,7 @@ function LyricsDetailPage() {
             if (foundEvent) {
                 // Set the found event as the currentEvent
                 setCurrentEvent(foundEvent);
-            } 
+            }
         } else {
             // Handle case where no eventID is available in the URL
             toast.error("Can't find the lyrics 😭 ")
@@ -39,16 +39,16 @@ function LyricsDetailPage() {
 
     return (
         <>
-            <div className=" mx-auto w-full flex-grow lg:flex xl:px-8 ">
-                <div className="lg:w-2/3 w-full">
+            <div className="w-full h-screen flex justify-center items-center flex-col">
+                <div className="w-1/2 mx-auto">
                     <LyricsView eventID={eventID} event={currentEvent} />
                 </div>
-                <div className="lg:w-1/3 h-min bg-white shadow-2xl rounded-lg w-full ml-2">
-                    <div className="m-auto">
-                        <CommentsList eventID={eventID}  lyricsEvent={currentEvent || new NDKEvent}/>
-                    </div>
+                <div className="h-min shadow-2xl rounded-lg w-1/3 ml-2">
+                    <CommentsList eventID={eventID} lyricsEvent={currentEvent || new NDKEvent} />
                 </div>
             </div>
+
+
         </>
 
     )

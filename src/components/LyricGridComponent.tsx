@@ -11,23 +11,29 @@ type Props = {
 function LyricGridComponent({ event, imageUrl }: Props) {
     const { setEvent } = useEvent();
 
-  
+
 
     return (
-        <Link to={`lyric/${event.id}`}
-        onClick={()=>{setEvent(event)}}
-            className="cursor-pointer relative bg-white border border-gray-300 rounded-lg shadow-lg p-4 hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 aspect-square"
-            style={{ backgroundImage: `url('${imageUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
-        }
+        <Link
+            to={`lyric/${event.id}`}
+            onClick={() => { setEvent(event); }}
+            className="bg-gradient-to-b from-transparent via-transparent via-20% to-black to-90% relative border border-black rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 aspect-square overflow-hidden"
         >
-            <div className="block relative">
-                <div className="absolute inset-0 bg-white bg-opacity-70 rounded-md blur-lg"></div>
-                <div className="relative text-black z-1 p-2">
-                    <h2 className="text-2xl mb-4 font-semibold">{event.tags.find((tag) => tag[0] === 'title')?.[1]}</h2>
-                    <p className="text-black truncate text-ellipsis italic h-10 text-3xl">{event.content}</p>
-                </div>
+            <img
+                src={imageUrl}
+                className="absolute w-full h-full object-cover mix-blend-overlay"
+                
+            />
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+                <h2 className="text-2xl text-white mb-4 font-semibold">
+                    {event.tags.find((tag) => tag[0] === 'title')?.[1]}
+                </h2>
+                <p className="text-white truncate text-ellipsis italic h-10 text-lg">
+                    {event.content}
+                </p>
             </div>
         </Link>
+
     )
 }
 
