@@ -81,15 +81,12 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
         "Share a lyric that you think everyone should hear.",
         "Expand the clever wordplay in this song's lyrics.",
         "How do these lyrics relate to your own experiences?",
-        "Imagine the song's lyrics as the dialogue in a quirky indie film. What's the scene?",
-        "Which of these lyrics would make the best inspirational tattoo, and where would you put it?",
         "If this song's lyrics were a secret code, what would they be hiding?",
         "If you could teleport to the world described in this song's lyrics, where would you end up?",
-        "If you were an alien hearing this song for the first time, what would you think the lyrics mean?",
     ]
 
     const getRandomPrompt = () => {
-        const randomIndex = Math.floor(Math.random() * 24) + 1;
+        const randomIndex = Math.floor(Math.random() * 21) + 1;
         return prompts[randomIndex]
     }
 
@@ -188,6 +185,8 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     }
     return (
         <div>
+            <div className='xl:text-3xl lg:text-3xl md:text-2xl text-2xl font-bold my-2 balance-card text-white justify-normal'> Share your thoughts...</div>
+            <div className='xl:text-xl lg:text-xl md:text-lg text-lg italic my-2  text-white justify-normal'> {selectedPrompt}</div>
             <div className="border p-2 border-black rounded-lg bg-gray-800">
                 <form onSubmit={onSubmit} method='POST'>
                     <div className="mb-6 m-2">
@@ -198,8 +197,8 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             required
                             rows={4}
                             value={userCommentContent}
-                            className=" placeholder:text-lg block p-2.5 w-full text-sm text-white bg-gray-900 rounded-lg border border-black focus:ring-blue-900 focus:border-blue-900"
-                            placeholder={selectedPrompt}
+                            placeholder="Add your thoughts or interpretations, use a prompt for inspiration!"
+                            className="h-48 placeholder:text-lg block p-2.5 w-full text-sm text-white bg-gray-900 rounded-lg border border-black focus:ring-blue-900 focus:border-blue-900"
                         >
                         </textarea>
                     </div>
@@ -211,7 +210,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                             className="border-black border-2 flex items-center h-10 text-white bg-gradient-to-l from-indigo-500 to-indigo-950  rounded-lg text-xs lg:text-sm xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2"
                         >
                             <SparklesIcon className="w-5 h-5 inline-block mr-2" />
-                            Get Another Prompt
+                            Try Another Prompt
                         </button>) :null}
                         <button
                             type="submit"
@@ -260,7 +259,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                                     <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{getDisplayName(event)}</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>
                                 </div>
-                                <p className="text-base font-light">{event.content}</p>
+                                <p className="text-base font-medium">{event.content}</p>
                                 {/* <p className="text-md">{event.author.profile?.displayName}</p> */}
                                 {/* TODO add like , reply, zap, report buttons etc.... */}
                                 <button className="bg-gray-600 border border-black rounded p-0.5 text-xs font-semibold"onClick={()=>{zapComment(event)}}>Zap⚡️</button>

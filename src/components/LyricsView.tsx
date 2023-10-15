@@ -297,7 +297,7 @@ const LyricsView = ({ eventID }: Props) => {
         <Loading />
       ) : (
         // TODO : make this tow rows, title & author on top, buttons and stats below
-        <div className="flex flex-col justify-center items-center">
+        <div className="justify-center items-center">
           {currentEvent ? ( // Display event content if currentEvent is available
             <>
               <div className='flex items-center justify-center w-full p-4 rounded-lg h-48 border border-black'
@@ -312,9 +312,9 @@ const LyricsView = ({ eventID }: Props) => {
                 </div>
               </div>
 
-              <div className='my-10 mx-10 rounded-lg shadow-2xl font-light w-4/5'>
+              <div className='my-10 rounded-lg shadow-2xl font-light w-4/5 mx-auto justify-right'>
                 <ReactMarkdown
-                  className='mx-10 space-y-2'
+                  className='space-y-2'
                   children={currentEvent.content}
                   components={{
                     // Map `h1` (`# heading`) to use `h2`s.
