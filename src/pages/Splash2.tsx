@@ -1,7 +1,15 @@
 import { BoltIcon, ChartBarIcon, FireIcon, MusicalNoteIcon , EyeIcon} from '@heroicons/react/20/solid'
 import { PuzzlePieceIcon, StarIcon } from '@heroicons/react/24/outline'
-import OnBoard from '../components/OnBoard'
+// import OnBoard from '../components/OnBoard'
 import { useNavigate } from 'react-router-dom'
+import SplashCarousel from '../components/SplashCarousel'
+import { useEffect, useState } from "react";
+import { NDKFilter } from '@nostr-dev-kit/ndk';
+import { useNDK } from '@nostr-dev-kit/ndk-react';
+import { toast } from 'react-toastify';
+import { useEvent } from '../context/EventContext';
+import Loading from './Loading';
+
 
 /**
    * 
@@ -62,11 +70,36 @@ function Splash2() {
 
   const navigate = useNavigate()
 
+  const { fetchEvents, ndk } = useNDK();
+  const { ndkEvents , setNDKEvents } = useEvent();
+  const [loadingState, setLoadingState] = useState<boolean>(false);
+
+  const filter: NDKFilter = {
+    kinds: [30023],
+    "#t": ["lyrics","lyrics"],
+  };
+
+  useEffect(() => {
+    setLoadingState(true);
+    console.log("loading lyrics")
+    fetchEvents(filter)
+      .then((response) => {
+        setNDKEvents(response);
+      })
+      .catch((err) => {
+        toast.error("Error getting lyrics..");
+        console.log(err);
+        setNDKEvents(null);
+      })
+      .finally(() => {
+        setLoadingState(false);
+      });
+  }, [ndk]);
+
   return (
     <>
       <div 
       className="mx-auto w-full flex-grow lg:flex xl:px-8 justify-center"
-      // style={{ backgroundImage: `url('${backgroundImagery}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
 
         <div className='flex-col items-center flex justify-center'>
@@ -77,7 +110,7 @@ function Splash2() {
           {/* <div>
             <img src={logo} className='h-36 w-auto flex' />
           </div> */}
-          <div className='mt-36 mb-64'>
+          <div className='mt-36 mb-36'>
             <button 
             onClick={()=>{navigate("lyrics")}}
             className="cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 flex items-center h-10 border-black border-2  text-gray-900 bg-purple-500 hover:bg-purple-600 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm lg:text-base xl:text-lg px-4 lg:px-5 xl:px-6 py-2.5 lg:py-3 xl:py-3.5 text-center mx-2">
@@ -88,6 +121,14 @@ function Splash2() {
             </button>
           </div>
 
+
+          {loadingState === true && <div key={1}><Loading/></div>}
+          {loadingState === false && 
+            <SplashCarousel 
+            ndkEvents={ndkEvents} 
+           />
+          }
+
           <div className='flex flex-row w-screen mt-10 mb-12 justify-between'>
             <div className='w-full flex flex-col items-center mx-6'>
               <div className='font-extrabold text-3xl text-white'>Fans 🤘</div>
@@ -96,30 +137,30 @@ function Splash2() {
                   <div key={feature.name} className="relative pl-16">
                     <dt className="text-lg font-semibold text-white">
                       <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg splash-icon border-black border-2">
-                        <feature.icon className="h-6 w-6  text-black" aria-hidden="true" />
+                        <feature.icon className="h-6 w-6  text-white" aria-hidden="true" />
                       </div>
                       <p>{feature.name}</p>
                     </dt>
-                    <dd className="text-base text-gray-200">{feature.description}</dd>
+                    <dd className="text-base text-gray-400">{feature.description}</dd>
                   </div>
                 ))}
               </dl>
             </div>
 
-            <OnBoard />
+            {/* <OnBoard /> */}
 
             <div className='gradient w-full flex flex-col items-center mx-6'>
               <div className='font-extrabold text-3xl text-white'>Artists 🎤</div>
               <dl className="max-w-xl flex flex-col space-y-10 lg:max-w-none p-4">
                 {artistFeatures.map((feature) => (
                   <div key={feature.name} className="relative pl-16">
-                    <dt className="text-lg font-semibold text-gray-900">
+                    <dt className="text-lg font-semibold text-white">
                       <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg splash-icon  border-black border-2">
-                        <feature.icon className="h-6 w-6 text-black" aria-hidden="true" />
+                        <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
                       </div>
                       <p>{feature.name}</p>
                     </dt>
-                    <dd className="text-base text-gray-600">{feature.description}</dd>
+                    <dd className="text-base text-gray-400">{feature.description}</dd>
                   </div>
                 ))}
               </dl>

@@ -10,7 +10,7 @@ type Props = {
 const MarkdownPreview = ({ markdownText, title }: Props) => {
     return (
         <div className="h-1/4 p-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            <label htmlFor="content" className="block text-lg font-medium text-gray-700">
+            <label htmlFor="content" className="block text-lg font-medium text-white">
                 Preview: {title}
             </label>
             <ReactMarkdown

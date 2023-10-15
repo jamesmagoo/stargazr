@@ -11,6 +11,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  overflow-x:hidden;
+  overflow-y:auto;
+
 }
 
  :root {
@@ -28,7 +31,7 @@
 }
 
 .splash-icon {
-  background: linear-gradient(to right, #fddb92 0%, #d1fdff 100%);
+  background: linear-gradient(to right, #020320 0%, #4647B1 100%);
 }
 
 .balance-card {
@@ -86,7 +89,7 @@ body {
   display: flex;
   place-items: center;
   background: black;
-  background-image: linear-gradient(to bottom, transparent 0%, black 100%),url('/public/starrysky_black.jpeg'); 
+  background-image: linear-gradient(to bottom, transparent 0%, black 100%),url('/starrysky_black.jpeg'); 
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
