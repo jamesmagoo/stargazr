@@ -233,11 +233,11 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
             leaveFrom='opacity-100 translate-y-0 sm:scale-100'
             leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
           >
-            <div className='bg-white inline-block align-bottom rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'>
+            <div className='bg-black inline-block align-bottom rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'>
               <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                 <button
                   type="button"
-                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="rounded-md bg-black text-white hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => handleCancel()}
                 >
                   <span className="sr-only">Close</span>
@@ -246,7 +246,7 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
               </div>
               <div className="absolute top-0 left-0 hidden pt-4 pl-4 sm:block">
                 <div
-                  className="rounded-md bg-white text-gray-600 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="rounded-md bg-black text-gray-200 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 
                 >
                     <div>{isFirstStep ? null : (<p>Step {currentStepIndex} / {steps.length}</p>)}</div>
@@ -256,7 +256,7 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
               </div>
               <div className="absolute bottom-0 left-0 hidden pb-8 pl-4 sm:block">
                 <div
-                  className="rounded-md bg-white text-gray-600 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="rounded-md bg-black text-gray-200 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 
                 >
                     <div>{isFirstStep ? null : (<div className='flex cursor-pointer' onClick={back} ><ArrowLeftIcon className="h-6 w-6" aria-hidden="true"/> Back</div>)}</div>
@@ -270,12 +270,12 @@ const OnBoardFlowModal = ({ showLoginModal, handleCancel, handleLogin }: Props) 
                   {isFirstStep ?
                     (<button
                       type='submit'
-                      className='flex cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 border-black border-2 text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 rounded-md shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium focus:ring-offset-2'
+                      className='flex cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 border-black border-2 text-black focus:ring-4 focus:outline-none focus:ring-indigo-600 rounded-md shadow-sm px-4 py-2 bg-white text-base font-medium focus:ring-offset-2'
                     >
                       Create Account
                     </button>) : (<button
                       type='submit'
-                      className='flex cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 border-black border-2 text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 rounded-md shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium focus:ring-offset-2'
+                      className='flex cursor cursor-pointer hover:shadow-xl transition duration-300 ease-in-out hover:scale-105 border-black border-2 text-black focus:ring-4 focus:outline-none focus:ring-indigo-600 rounded-md shadow-sm px-4 py-2 bg-white text-base font-medium focus:ring-offset-2'
                     >
                       {isLastStep ?
                         (<div>{loading ? (<div className="flex items-center">

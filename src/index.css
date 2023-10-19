@@ -72,7 +72,6 @@ nav {
     px-10
     flex items-center gap-5 
     mb-5 mx-auto 
-    border-b-2 border-black
     max-w-full;
 }
 
