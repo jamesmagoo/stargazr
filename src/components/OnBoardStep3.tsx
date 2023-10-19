@@ -6,12 +6,12 @@ type Props = {
 function OnBoardStep3({ handleFileChange, selectedFile }: Props) {
     return (
         <div className='my-12'>
-            <label className="block text-base mb-2 font-normal text-slate-600"
+            <label className="block text-base mb-2 font-normal text-slate-300"
                 htmlFor="file_input">Upload Profile Pic
             </label>
             <div className="flex flex-row justify-between items-center">
                 <input
-                    className="block text-sm focus:border-indigo-600 text-gray-900 border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none px-4 py-2.5  placeholder:text-text/50"
+                    className="block text-sm focus:border-indigo-600 text-white rounded-xl cursor-pointer bg-gray-700 focus:outline-none px-4 py-2.5  placeholder:text-text/50"
                     id="file_input"
                     accept="image/*"
                     required
