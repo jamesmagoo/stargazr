@@ -121,10 +121,9 @@ function Splash2() {
             </button>
           </div>
 
-
           {loadingState === true &&
-            <div key={1}>
-              <div className='animate-pulse flex flex-col items-center justify-center w-screen'>
+            <div key={1} className='hidden md:block'>
+              <div className=' animate-pulse flex flex-col items-center justify-center w-screen'>
                 <img
                   className="w-auto h-96"
                   src={logo} alt='Loading' />
@@ -132,16 +131,16 @@ function Splash2() {
               </div>
             </div>}
           {loadingState === false &&
-            <SplashCarousel
-              ndkEvents={ndkEvents}
-            />
+              <SplashCarousel
+                ndkEvents={ndkEvents}
+              />
           }
 
-<div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mt-2 text-center balance-card text-white'> A borderless community where</div>
+          <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mt-2 text-center balance-card text-white'> A borderless community where</div>
           <div className='xl:text-7xl lg:text-6xl md:text-5xl text-5xl font-bold mb-8 text-center text-white'> you own your data ✨</div>
 
-          <div className='flex flex-row w-screen mt-10 mb-12 justify-between'>
-            <div className='w-full flex flex-col items-center mx-6'>
+          <div className='flex flex-col md:flex-row w-screen mt-10 mb-12 justify-between'>
+            <div className='w-full flex flex-col items-center md:mx-6 my-6'>
               <div className='font-extrabold text-3xl text-white'>Fans 🤘</div>
               <dl className="max-w-xl flex flex-col space-y-5 lg:max-w-none p-4">
                 {fanFeatures.map((feature) => (
@@ -160,7 +159,7 @@ function Splash2() {
 
             {/* <OnBoard /> */}
 
-            <div className='gradient w-full flex flex-col items-center mx-6'>
+            <div className='gradient w-full flex flex-col items-center md:mx-6 my-6'>
               <div className='font-extrabold text-3xl text-white'>Artists 🎤</div>
               <dl className="max-w-xl flex flex-col space-y-10 lg:max-w-none p-4">
                 {artistFeatures.map((feature) => (

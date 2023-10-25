@@ -50,18 +50,18 @@ function SplashCarousel({ ndkEvents }: Props) {
                     className="text-xl mb-2 font-semibold hover:cursor-pointer hover:text-indigo-500">
                         {value.tags.find((tag) => tag[0] === 'title')?.[1]}
                     </h2>
-                    <p className="text-white line-clamp-4 italic">
+                    <div className="text-white line-clamp-4 italic">
                     <ReactMarkdown
                   className='space-y-2'
                   children={value.content}/>
-                    </p>
+                    </div>
                 </div>
             </div>
         ,
     })));
 
     return (
-        <div className='w-full h-96 mb-36'>
+        <div className='w-full h-96 mb-36 hidden md:block'>
             <Carousel
                 slides={slides || []}
                 offsetRadius={offsetRadius}

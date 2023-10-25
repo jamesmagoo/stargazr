@@ -305,14 +305,14 @@ const LyricsView = ({ eventID }: Props) => {
               </div>
               <div className='flex items-center justify-center w-full h-24 p-4 rounded-lg' >
                 <div className='flex flex-col items-center'>
-                  <p className='text-white border border-black rounded-xl text-center text-sm md:text-4xl lg:text-4xl xl:text-4xl font-bold line-clamp-2 backdrop-blur-lg p-2 text-y'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
+                  <p className='text-white border border-black rounded-xl text-center text-4xl lg:text-4xl xl:text-4xl font-bold line-clamp-2 backdrop-blur-lg p-2 text-y'>{currentEvent?.tags.find(tag => tag[0] === 'title')?.[1]}</p>
                   {/* TODO - get the profile of artist using the event npub?? */}
                   <p className='text-sm'>{currentEvent.author.profile ? currentEvent.author.profile?.displayName : "Artist"}</p>
                   <ZapButton onClick={() => setShowZapModal(true)} />
                 </div>
               </div>
 
-              <div className='my-10 rounded-lg shadow-2xl font-light w-4/5 mx-auto justify-right'>
+              <div className='my-10 rounded-lg shadow-2xl font-light w-full sm:w-full md:w-full lg:w-full xl:w-full 2xl:w-4/5 mx-auto justify-right'>
                 <ReactMarkdown
                   className='space-y-2'
                   children={currentEvent.content}
@@ -320,7 +320,7 @@ const LyricsView = ({ eventID }: Props) => {
                     // Map `h1` (`# heading`) to use `h2`s.
                     h1: 'h2',
                     // Rewrite `em`s (`*like so*`) to `i` with a red foreground color.
-                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer text-slate-300 text-lg font-medium' onClick={() => { console.log('Good lyric') }}{...props} />,
+                    p: ({ node, ...props }) => <div className='p-5 cursor-pointer text-slate-300 text-base sm:text-lg font-medium' onClick={() => { console.log('Good lyric') }}{...props} />,
                   }}
                 />
               </div>

@@ -186,7 +186,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
     return (
         <div>
             <div className='xl:text-3xl lg:text-3xl md:text-2xl text-2xl font-bold my-2 balance-card text-white justify-normal'> Share your thoughts...</div>
-            <div className='xl:text-xl lg:text-xl md:text-lg text-lg italic my-2  text-white justify-normal'> {selectedPrompt}</div>
+            <div className='border border-yellow-300 bg-black rounded-lg py-2 text-center xl:text-xl lg:text-xl md:text-lg text-lg italic my-2 text-indigo-400 font-semibold justify-normal'> {selectedPrompt}</div>
             <div className="border p-2 border-black rounded-lg bg-gray-800">
                 <form onSubmit={onSubmit} method='POST'>
                     <div className="mb-6 m-2">
@@ -254,7 +254,7 @@ function CommentsSection({ eventID, lyricsEvent }: Props) {
                     ) : fetchedEvents.length > 0 ? (
                         // If events are fetched, display them
                         fetchedEvents.map((event) => (
-                            <div key={event.id} className="comment-card mx-2 text-sm space-y-3 w-auto p-2 my-2 border-2  text-slate-200 bg-gray-800 rounded-lg border-black shadow-xl">
+                            <div key={event.id} className="comment-card text-sm space-y-3 w-auto p-2 my-2 border-2  text-slate-200 bg-gray-800 rounded-lg border-black shadow-xl">
                                 <div className="flex-row flex border-b-2 border-y-0 border-x-0 border border-black">
                                     <div className="text-sm font-bold mr-4 truncate w-24 text-ellipsis">{getDisplayName(event)}</div>
                                     <div className="font-light text-slate-500">{event.created_at ? formatTimestampToDateString(event?.created_at) : null}</div>

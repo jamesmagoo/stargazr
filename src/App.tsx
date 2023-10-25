@@ -2,17 +2,16 @@ import { Fragment } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Navbar from './components/Navbar.tsx';
 import { UserProvider } from './context/UserContext.tsx';
 import './index.css';
 import Home from "./pages/Home.tsx";
 import PublishLyricsPage from './pages/PublishLyricsPage.tsx';
 import UserPage2 from "./pages/UserPage2.tsx";
-import HomePageView from './pages/HomePageView.tsx';
 import LyricsDetailPage from './pages/LyricsDetailPage.tsx';
 import Splash2 from './pages/Splash2.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
 import Footer from './components/Footer.tsx';
+import Navbar2 from './components/Navbar2.tsx';
 
 function App() {
 
@@ -20,7 +19,7 @@ function App() {
     <BrowserRouter>
     <Fragment>
       <UserProvider>
-        <Navbar />
+        <Navbar2 />
         <Routes>
           <Route path='/' element={<Splash2 />} />
           <Route path='/lyrics' element={<Home />} />
@@ -29,7 +28,6 @@ function App() {
           <Route path='/home' element={<PrivateRoute />}>
               <Route path='/home' element={<UserPage2 />} />
             </Route>
-          <Route path='/test' element={<HomePageView />} />
         </Routes>
         <Footer/>
         <ToastContainer

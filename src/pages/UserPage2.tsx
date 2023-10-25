@@ -1,16 +1,18 @@
 import { useUser } from '../context/UserContext';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
+import { BoltIcon } from '@heroicons/react/20/solid';
 
 type Props = {}
 
 function UserPage2({ }: Props) {
 
-    const { user } = useUser();
+    const { user, logout } = useUser();
     const userProfileImage = user?.profile?.image || localStorage.getItem("profile_picture") || "/placeholders/placeholder-profile.png";
     const userBannerImage = "/placeholders/banner_placeholder.png";
 
     return (
         <div className="mx-auto w-full flex-grow lg:flex xl:px-8 h-full">
+            
             <div className="m-4 lg:w-1/2 w-full h-max border-2 border-black rounded-lg p-2 shadow-lg shadow-slate-500 pb-4">
                 {user ? (
                     <div >
@@ -32,6 +34,14 @@ function UserPage2({ }: Props) {
                             <p className="text-gray-700">Website: {user.profile?.website ? user.profile?.website : "No webite set - go to profile settings."}</p>
                             <p className="text-gray-700">{user.profile?.lud16}</p>
                         </div>
+                        <button
+                                type='button'
+                                className='relative inline-flex items-center px-2 py-1 md:px-4 md:py-2 border border-black shadow-sm text-sm font-medium rounded-md text-black bg-red-500 hover:bg-red-200'
+                                onClick={() => { logout() }} // Assuming you have a function to handle logout
+                            >
+                                <BoltIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' /> {/* Replace with your logout icon */}
+                                <span>Logout</span>
+                            </button>
                     </div>
                 ) : (
                     <div>Loading...</div>

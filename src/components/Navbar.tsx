@@ -19,7 +19,6 @@ const Navbar = () => {
     const { ndk, loginWithNip07, loginWithSecret } = useNDK();
     const navigate = useNavigate();
 
-
     const handleCancelLoginModal = () => {
         setShowLoginModal(false);
     };
@@ -112,7 +111,7 @@ const Navbar = () => {
         <>
             <nav className='justify-between mt-6'>
                 <Link to={`/`}>
-                    <div className="items-center justify-between font-mono text-3xl flex flex-row">
+                    <div className="items-center justify-between font-mono md:text-3xl flex flex-col md:flex-row">
                         <img
                             className='block h-20 w-auto'
                             src={logo}

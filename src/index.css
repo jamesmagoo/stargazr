@@ -65,7 +65,7 @@
 **/
 
 
-nav {
+/* nav {
   background: transparent;
   @apply
     py-1
@@ -73,7 +73,7 @@ nav {
     flex items-center gap-5 
     mb-5 mx-auto 
     max-w-full;
-}
+} */
 
 a {
   color: white;
