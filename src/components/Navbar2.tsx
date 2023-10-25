@@ -1,20 +1,17 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BoltIcon, MusicalNoteIcon, PencilIcon } from '@heroicons/react/20/solid';
+import { Bars3Icon, MusicalNoteIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNDK } from '@nostr-dev-kit/ndk-react';
 import { logEvent } from 'firebase/analytics';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { analytics } from '../../firebase.config';
-import logo from '../assets/stargazr.svg'
+import logo from '../assets/stargazr.svg';
 import { useUser } from '../context/UserContext';
-import { XMarkIcon, Bars3Icon } from '@heroicons/react/20/solid';
-import OnBoardFlowModal from './OnBoardFlowModal'
+import OnBoardFlowModal from './OnBoardFlowModal';
 
 
 type Props = {}
@@ -26,7 +23,7 @@ function classNames(...classes: any[]) {
 export default function Navbar2({ }: Props) {
 
 
-    const { user, setUser, logout } = useUser();
+    const { user, setUser } = useUser();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const { ndk, loginWithNip07, loginWithSecret } = useNDK();
     const navigate = useNavigate();
