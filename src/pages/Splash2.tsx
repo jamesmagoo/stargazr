@@ -76,7 +76,7 @@ function Splash2() {
 
   const filter: NDKFilter = {
     kinds: [30023],
-    "#t": ["lyrics", "lyrics"],
+    "#t": ["lyrics", "lyrics", "music", "art", "creative", "poetry"],
   };
 
   useEffect(() => {
